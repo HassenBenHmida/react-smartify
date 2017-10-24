@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 class ArtistComponent extends Component {
     constructor(props){
+        console.log(props.artists.artists)
         super(props)
         this.state = {
 

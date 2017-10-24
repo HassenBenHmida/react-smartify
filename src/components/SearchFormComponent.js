@@ -12,6 +12,7 @@ class SearchFormComponent extends Component {
         search_result: undefined,
         disable_search: true
       }
+      
     }
 
     doSearch() {
@@ -20,15 +21,20 @@ class SearchFormComponent extends Component {
             this.setState({search_result: json})
         })
       }
-  
-    handleChange(e){
-      if(e.target.value.length > 0){
+
+    handleChangeInput(e){
+      if(e.target.value.replace(/ /g, '').length > 0){
         this.setState({disable_search: false})
         this.setState({search_text: e.target.value})
       }else{
         this.setState({disable_search: true})
         this.setState({search_text: ''})
       }
+    }
+
+    handleChangeRadio(e){
+      this.setState({search_type: e.target.value})
+      this.setState({search_result: undefined})
     }
       
 
@@ -41,7 +47,7 @@ class SearchFormComponent extends Component {
               <div className="row">
                 <div className="col-sm-6">
                   <legend className="col-form-legend col-sm-12">What Are You Looking For ?</legend>
-                  <input className="form-control" type='text' onChange={ e => this.handleChange(e)} value={this.state.search_text} />
+                  <input className="form-control" type='text' onChange={ e => this.handleChangeInput(e)} value={this.state.search_text} />
                 </div>
                 <div className="col-sm-6">
                   <fieldset className="form-group">
@@ -50,19 +56,19 @@ class SearchFormComponent extends Component {
                       <div className="col-sm-12">
                         <div className="form-check">
                           <label className="form-check-label">
-                            <input className="form-check-input" type='radio' name="gridRadios" checked={(this.state != null) ? this.state.search_type === 'artist' : 0} onChange={e => this.setState({search_type: 'artist'})} />
+                            <input className="form-check-input" type='radio' name="gridRadios" checked={(this.state != null) ? this.state.search_type === 'artist' : 0} value='artist' onChange={e => this.handleChangeRadio(e)} />
                             Artist
                           </label>
                         </div>
                         <div className="form-check">
                           <label className="form-check-label">
-                            <input className="form-check-input" type='radio' name="gridRadios" checked={(this.state != null) ? this.state.search_type === 'album' : 0} onChange={e => this.setState({search_type: 'album'})} /> 
+                            <input className="form-check-input" type='radio' name="gridRadios" checked={(this.state != null) ? this.state.search_type === 'album' : 0} value='album' onChange={e => this.handleChangeRadio(e)} /> 
                             Album
                           </label>
                         </div>
                         <div className="form-check">
                           <label className="form-check-label">
-                            <input className="form-check-input" type='radio' name="gridRadios" checked={(this.state != null) ? this.state.search_type === 'track' : 0} onChange={e => this.setState({search_type: 'track'})} /> 
+                            <input className="form-check-input" type='radio' name="gridRadios" checked={(this.state != null) ? this.state.search_type === 'track' : 0} value='track' onChange={e => this.handleChangeRadio(e)} /> 
                             Track
                           </label>
                         </div>
@@ -76,7 +82,13 @@ class SearchFormComponent extends Component {
                 </div>
 
                 <div className="col-sm-12">
-                  <SearchResultComponent objSearchResult={this.state.search_result} search_type={this.state.search_type} />
+                  {
+                    (this.state.search_result) ? 
+                      <SearchResultComponent objSearchResult={this.state.search_result} search_type={this.state.search_type} />
+                    :
+                      null
+                  }
+                  
                 </div>
               </div>
             </div>
