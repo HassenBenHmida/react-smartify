@@ -19,17 +19,28 @@ class AlbumComponent extends Component {
       e.preventDefault()
     }
 
-    AlbumsNames(albumsFromArtist, artist_id){
-        if(!albumsFromArtist){
+    AlbumsNames(albums, artist_id){
+        if(!albums){
             return (
                 <div>Result not found yet</div>
             )
         }
+        
+        let accordian_id = "accordion-albums"
+        let parent_id = "#accordion-albums"
+        if(artist_id) {
+            accordian_id = "accordion-albums-" +  artist_id.toString()
+            parent_id = "#accordion-albums-" +  artist_id.toString()
+        }
+
+        
+        
+        console.log(albums)
         return (
             <div className="container">
-                <div id={"accordion-albums-" +  artist_id.toString()} role="tablist">
+                <div id={accordian_id} role="tablist">
                     {
-                        albumsFromArtist.map(album => (
+                        albums.map(album => (
                         <div key={"album-" + album.id} className="card">
                             <div className="card-header" role="tab" id={(album.name + album.id.toString()).replace(/ /g,'')}>
                                 <h5 className="mb-0">
@@ -39,7 +50,7 @@ class AlbumComponent extends Component {
                                 </h5>
                             </div>
 
-                            <div id={album.id.toString()} className="collapse" role="tabpanel" aria-labelledby={(album.name + album.id.toString()).replace(/ /g,'')} data-parent={"#accordion-albums-" +  artist_id.toString()}>
+                            <div id={album.id.toString()} className="collapse" role="tabpanel" aria-labelledby={(album.name + album.id.toString()).replace(/ /g,'')} data-parent={parent_id}>
                                 <div className="card-body">
                                     test
                                 </div>
