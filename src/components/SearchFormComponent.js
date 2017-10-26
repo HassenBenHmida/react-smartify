@@ -2,24 +2,42 @@ import React, { Component } from 'react';
 import SearchResultComponent from './SearchResultComponent';
 import {search} from '../lib/SpotifyUtil';
 
+function AlertWarning(props){
+  return (
+    <div className="col-sm-12">
+      <div className={"alert alert-warning " + props.warning} role="alert">
+        {props.error}
+      </div>
+    </div>
+  )
+}
 
 class SearchFormComponent extends Component {
     constructor(props) {
       super(props)
       this.state = {
         search_text: '',
-        search_type: 'artist',
+        search_type: '',
         search_result: undefined,
-        disable_search: true
+        disable_search: true,
+        warning: 'hide',
+        error:'',
       }
       
+      this.handleSelectChange = this.handleSelectChange.bind(this);
     }
 
     doSearch() {
-        search(this.state.search_text, this.state.search_type).then(
-          json => {
-            this.setState({search_result: json})
-        })
+        if(this.state.search_type !== ''){
+          search(this.state.search_text, this.state.search_type).then(
+            json => {
+              this.setState({search_result: json})
+          })
+          this.setState({warning: 'hide'})
+        }else{
+          this.setState({error: 'Please select the type you\'re searching for !'})
+          this.setState({warning: 'show'})
+        }
       }
 
     handleChangeInput(e){
@@ -31,12 +49,11 @@ class SearchFormComponent extends Component {
         this.setState({search_text: ''})
       }
     }
-
-    handleChangeRadio(e){
+      
+    handleSelectChange(e){
       this.setState({search_type: e.target.value})
       this.setState({search_result: undefined})
     }
-      
 
     render() {
       return (
@@ -45,6 +62,7 @@ class SearchFormComponent extends Component {
           <div className="card-body">
             <div className="card-text">
               <div className="row">
+                <AlertWarning warning={this.state.warning} error={this.state.error} />
                 <div className="col-sm-6">
                   <legend className="col-form-legend col-sm-12">What Are You Looking For ?</legend>
                   <input className="form-control" type='text' onChange={ e => this.handleChangeInput(e)} value={this.state.search_text} />
@@ -53,7 +71,7 @@ class SearchFormComponent extends Component {
                   <fieldset className="form-group">
                     <div className="row">
                       <legend className="col-form-legend col-sm-12">Select Your Choice :</legend>
-                      <div className="col-sm-12">
+                      {/* <div className="col-sm-12">
                         <div className="form-check">
                           <label className="form-check-label">
                             <input className="form-check-input" type='radio' name="gridRadios" checked={(this.state != null) ? this.state.search_type === 'artist' : 0} value='artist' onChange={e => this.handleChangeRadio(e)} />
@@ -72,6 +90,15 @@ class SearchFormComponent extends Component {
                             Track
                           </label>
                         </div>
+                      </div> */}
+                      
+                      <div className="col-sm-12">
+                        <select className="custom-select" value={this.state.search_type} onChange={this.handleSelectChange}>
+                          <option value=''>Please choose the type ..</option>
+                          <option value="artist">Artist</option>
+                          <option value="album">Album</option>
+                          <option value="track">Track</option>
+                        </select>
                       </div>
                     </div>
                   </fieldset>

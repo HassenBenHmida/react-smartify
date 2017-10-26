@@ -12,26 +12,27 @@ class searchResultComponent extends Component{
     }
 
     render() {
-
       return (
-        <div className="row">
-            {
-              (this.props.search_type === 'artist' && this.props.objSearchResult) ?
+        <div className="col-sm-12">
+          <div className="row">
+              {
+                (this.props.search_type === 'artist' && this.props.objSearchResult) ?
                 <ArtistComponent artists={this.props.objSearchResult.artists.items} />
-              : null
-            }
+                : null
+              }
 
-            {
-              (this.props.search_type === 'album' && this.props.objSearchResult) ?
-                <AlbumComponent albums={this.props.objSearchResult.albums.items} />
-              : null
-            }
+              {
+                (this.props.search_type === 'album' && this.props.objSearchResult) ?
+                  <AlbumComponent albums={this.props.objSearchResult.albums.items} />
+                : null
+              }
 
-            {
-              (this.props.search_type === 'track'  && this.props.objSearchResult) ?
-                <TrackComponent tracks={this.props.objSearchResult.tracks.items} />
-              : null
-            }
+              {
+                (this.props.search_type === 'track'  && this.props.objSearchResult) ?
+                  <TrackComponent tracks={this.props.objSearchResult.tracks.items} />
+                : null
+              }
+          </div>
         </div>
       );
     }
