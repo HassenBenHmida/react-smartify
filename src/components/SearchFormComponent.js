@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import SearchResultComponent from './SearchResultComponent';
 import {search} from '../lib/SpotifyUtil';
+/* import {Link} from 'react-router-dom' */
+// import PropTypes from 'prop-types';
 
 function AlertWarning(props){
   return (
@@ -22,9 +24,12 @@ class SearchFormComponent extends Component {
         disable_search: true,
         warning: 'hide',
         error:'',
+        foo:''
       }
       
       this.handleSelectChange = this.handleSelectChange.bind(this);
+      this.handleChangeInput = this.handleChangeInput.bind(this)
+      this.doSearch = this.doSearch.bind(this)
     }
 
     doSearch() {
@@ -34,6 +39,7 @@ class SearchFormComponent extends Component {
               this.setState({search_result: json})
           })
           this.setState({warning: 'hide'})
+          
         }else{
           this.setState({error: 'Please select the type you\'re searching for !'})
           this.setState({warning: 'show'})
@@ -65,33 +71,12 @@ class SearchFormComponent extends Component {
                 <AlertWarning warning={this.state.warning} error={this.state.error} />
                 <div className="col-sm-6">
                   <legend className="col-form-legend col-sm-12">What Are You Looking For ?</legend>
-                  <input className="form-control" type='text' onChange={ e => this.handleChangeInput(e)} value={this.state.search_text} />
+                  <input className="form-control" type='text' onChange={this.handleChangeInput} value={this.state.search_text} />
                 </div>
                 <div className="col-sm-6">
                   <fieldset className="form-group">
                     <div className="row">
                       <legend className="col-form-legend col-sm-12">Select Your Choice :</legend>
-                      {/* <div className="col-sm-12">
-                        <div className="form-check">
-                          <label className="form-check-label">
-                            <input className="form-check-input" type='radio' name="gridRadios" checked={(this.state != null) ? this.state.search_type === 'artist' : 0} value='artist' onChange={e => this.handleChangeRadio(e)} />
-                            Artist
-                          </label>
-                        </div>
-                        <div className="form-check">
-                          <label className="form-check-label">
-                            <input className="form-check-input" type='radio' name="gridRadios" checked={(this.state != null) ? this.state.search_type === 'album' : 0} value='album' onChange={e => this.handleChangeRadio(e)} /> 
-                            Album
-                          </label>
-                        </div>
-                        <div className="form-check">
-                          <label className="form-check-label">
-                            <input className="form-check-input" type='radio' name="gridRadios" checked={(this.state != null) ? this.state.search_type === 'track' : 0} value='track' onChange={e => this.handleChangeRadio(e)} /> 
-                            Track
-                          </label>
-                        </div>
-                      </div> */}
-                      
                       <div className="col-sm-12">
                         <select className="custom-select" value={this.state.search_type} onChange={this.handleSelectChange}>
                           <option value=''>Please choose the type ..</option>
@@ -105,7 +90,7 @@ class SearchFormComponent extends Component {
                 </div>
 
                 <div className="mx-auto">
-                  <button onClick={ e => this.doSearch()} className="btn btn-primary" disabled={this.state.disable_search}>Search</button>
+                  <button onClick={this.doSearch} className="btn btn-primary" disabled={this.state.disable_search}>Search</button>
                 </div>
 
                 <div className="col-sm-12">
@@ -124,10 +109,6 @@ class SearchFormComponent extends Component {
         </div>
       );
     }
-  
-    // Private methods
-  
-
   }
 
   export default SearchFormComponent;
