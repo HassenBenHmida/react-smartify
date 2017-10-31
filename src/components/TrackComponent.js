@@ -27,7 +27,10 @@ class TrackComponent extends Component {
                     </div>
                     <div className="modal-body">
                         <ul>
-                            {(tracks) ? this.TracksNames(tracks) : null}
+                            {(tracks) ? this.TracksNames(tracks) : 
+                                <div id="spinner" className="text-center">
+                                    <i className="fa fa-spinner fa-spin"></i>
+                                </div>}
                         </ul>
                     </div>
                     <div className="modal-footer">

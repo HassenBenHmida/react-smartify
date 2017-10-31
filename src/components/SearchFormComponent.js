@@ -20,8 +20,7 @@ class SearchFormComponent extends Component {
         search: false,
         disable_search: true,
         warning: 'hide',
-        error:'',
-        foo:''
+        error:''
       }
       
       this.handleSelectChange = this.handleSelectChange.bind(this);
@@ -57,9 +56,9 @@ class SearchFormComponent extends Component {
     search(){
       if(this.state.search_text && this.state.search_type)
         this.setState({search:true, warning:'hide', error: ''})
-        else {
-          this.setState({warning:'show', error: 'Please check the form data.'})
-        }
+      else {
+        this.setState({warning:'show', error: 'Please check the form data.'})
+      }
     }
 
     render() {

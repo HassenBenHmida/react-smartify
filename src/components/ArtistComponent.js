@@ -38,7 +38,10 @@ class ArtistComponent extends Component {
                 <div id={"tabpanel-" + artist.id.toString()} className="collapse" role="tabpanel" aria-labelledby={("card-header-" + artist.id.toString()).replace(/ /g,'')} data-parent="#accordion-artist">
                     <div className="card-body">
                         {
-                            (this.state.albums_result) ? <AlbumComponent albumsFromArtist={this.state.albums_result} artist_id={artist.id} /> : null
+                            (this.state.albums_result) ? <AlbumComponent albumsFromArtist={this.state.albums_result} artist_id={artist.id} /> : 
+                                <div id="spinner" className="text-center">
+                                    <i className="fa fa-spinner fa-spin"></i>
+                                </div>
                         }
                     </div>
                 </div>
