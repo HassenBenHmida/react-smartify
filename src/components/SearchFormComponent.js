@@ -90,15 +90,14 @@ class SearchFormComponent extends Component {
                 </div>
 
                 <div className="mx-auto">
-                  <button onClick={this.doSearch} className="btn btn-primary" disabled={this.state.disable_search}>Search</button>
+                  {/* <button onClick={this.doSearch} className="btn btn-primary" disabled={this.state.disable_search}>Search</button> */}
+                  <button className="btn btn-primary" disabled={this.state.disable_search}>Search</button>
                 </div>
 
                 <div className="col-sm-12">
                   {
-                    (this.state.search_result) ? 
-                      <SearchResultComponent objSearchResult={this.state.search_result} search_type={this.state.search_type} />
-                    :
-                      null
+                    (this.state.search_text) && (this.state.search_type) &&
+                      <SearchResultComponent search_text={this.state.search_text} search_type={this.state.search_type} />
                   }
                   
                 </div>

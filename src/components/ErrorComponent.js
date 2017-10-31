@@ -10,7 +10,7 @@ class ErrorComponent extends Component {
 
     render(){
         return (
-            <div>ERROR 404</div>
+            <div>No Result Found.</div>
         )
     }
 }

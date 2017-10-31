@@ -22,9 +22,13 @@ class searchResultComponent extends Component{
         })
     }
 
-    render() {      
-      let searchfor = undefined
+    render() {     
+      
+      // I added this logic to see how I can render this Component using only the router.
 
+      // Searchig for what ?
+      let searchfor = undefined
+      // Get the type by router whether it's defined by the router or by props (searching) 
       if((this.props.match && (this.props.match.params.type === "artist")) || (this.props.search_type === 'artist')){
         searchfor = "artist"
       }else if((this.props.match && (this.props.match.params.type === "album")) || (this.props.search_type === 'album')){
@@ -32,19 +36,22 @@ class searchResultComponent extends Component{
       }else if((this.props.match && (this.props.match.params.type === "track")) || (this.props.search_type === 'track')){
         searchfor = "track"
       }
-
+      
+      // Searching for the result here using the function 'doSearch'
       let array_type = ['artist', 'album', 'track']
       if(this.props.match && array_type.indexOf(searchfor) !== -1){
         this.doSearch(this.props.match.params.search_text, searchfor)
+      }else if(this.props.search_text){
+        this.doSearch(this.props.search_text, searchfor)
       }
       
+      // Set the result
       let result = undefined
-      if(this.props.objSearchResult){
-        result = this.props.objSearchResult
-      }else if(this.state.search_result){
+      if(this.state.search_result){
         result = this.state.search_result
       }
 
+      // Which component will be rendred ?
       let component = undefined
       if (result && searchfor === 'artist'){
         component = 'artist'
