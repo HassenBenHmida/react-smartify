@@ -9,78 +9,48 @@ class searchResultComponent extends Component{
     constructor(props){
       super(props)
       this.state = {
-        search_result: null
+        search_result: null,
+        component:undefined
       }
 
       this.doSearch = this.doSearch.bind(this)
     }
 
-    doSearch(search_text, searchfor) {
-        search(search_text, searchfor).then(
+    doSearch() {
+        search(this.props.search_text.toString(), this.props.search_type.toString()).then(
           json => {
             this.setState({search_result: json})
         })
     }
 
-    render() {     
-      
-      // I added this logic to see how I can render this Component using only the router.
-
-      // Searchig for what ?
-      let searchfor = undefined
-      // Get the type by router whether it's defined by the router or by props (searching) 
-      if((this.props.match && (this.props.match.params.type === "artist")) || (this.props.search_type === 'artist')){
-        searchfor = "artist"
-      }else if((this.props.match && (this.props.match.params.type === "album")) || (this.props.search_type === 'album')){
-        searchfor = "album"
-      }else if((this.props.match && (this.props.match.params.type === "track")) || (this.props.search_type === 'track')){
-        searchfor = "track"
-      }
-      
-      // Searching for the result here using the function 'doSearch'
+    componentWillMount(){      
       let array_type = ['artist', 'album', 'track']
-      if(this.props.match && array_type.indexOf(searchfor) !== -1){
-        this.doSearch(this.props.match.params.search_text, searchfor)
-      }else if(this.props.search_text){
-        this.doSearch(this.props.search_text, searchfor)
+      if(this.props.search_text && array_type.indexOf(this.props.search_type) !== -1){
+        this.doSearch()
       }
-      
-      // Set the result
-      let result = undefined
-      if(this.state.search_result){
-        result = this.state.search_result
-      }
+    }
 
-      // Which component will be rendred ?
-      let component = undefined
-      if (result && searchfor === 'artist'){
-        component = 'artist'
-      }else if (result && searchfor === 'album'){
-        component = 'album'
-      }else if (result && searchfor === 'track'){
-        component = 'track'
-      }
-
+    render() {
       return (
         <div className="col-sm-12">
           <div className="row">
                 {
-                  (component === 'artist') &&
-                    <ArtistComponent artists={result.artists.items} />
+                  (this.state.search_result && this.props.search_type === 'artist') &&
+                    <ArtistComponent artists={this.state.search_result.artists.items} />
                 }
 
                 {
-                  (component === 'album') &&
-                    <AlbumComponent albums={result.albums.items} />
+                  (this.state.search_result && this.props.search_type === 'album') &&
+                    <AlbumComponent albums={this.state.search_result.albums.items} />
                 }
 
                 {
-                  (component === 'track') &&
-                    <TrackComponent tracks={result.tracks.items} />
+                  (this.state.search_result && this.props.search_type === 'track') &&
+                    <TrackComponent tracks={this.state.search_result.tracks.items} />
                 }
 
                 {
-                  (!component) && 
+                  (!this.state.search_result) && 
                     <ErrorComponent />
                 }
               

@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 import SearchResultComponent from './SearchResultComponent';
-import {search} from '../lib/SpotifyUtil';
-/* import {Link} from 'react-router-dom' */
-// import PropTypes from 'prop-types';
 
 function AlertWarning(props){
   return (
@@ -20,7 +17,7 @@ class SearchFormComponent extends Component {
       this.state = {
         search_text: '',
         search_type: '',
-        search_result: undefined,
+        search: false,
         disable_search: true,
         warning: 'hide',
         error:'',
@@ -29,24 +26,19 @@ class SearchFormComponent extends Component {
       
       this.handleSelectChange = this.handleSelectChange.bind(this);
       this.handleChangeInput = this.handleChangeInput.bind(this)
-      this.doSearch = this.doSearch.bind(this)
+      this.search = this.search.bind(this)
     }
 
-    doSearch() {
-        if(this.state.search_type !== ''){
-          search(this.state.search_text, this.state.search_type).then(
-            json => {
-              this.setState({search_result: json})
-          })
-          this.setState({warning: 'hide'})
-          
-        }else{
-          this.setState({error: 'Please select the type you\'re searching for !'})
-          this.setState({warning: 'show'})
-        }
+    componentWillMount(){
+      if((this.props.match && this.props.match.params.type && this.props.match.params.search_text)){
+        this.setState({search_type: this.props.match.params.type})
+        this.setState({search_text: this.props.match.params.search_text})
+        this.search()
       }
+    }
 
     handleChangeInput(e){
+      this.setState({search:false})
       if(e.target.value.replace(/ /g, '').length > 0){
         this.setState({disable_search: false})
         this.setState({search_text: e.target.value})
@@ -59,6 +51,15 @@ class SearchFormComponent extends Component {
     handleSelectChange(e){
       this.setState({search_type: e.target.value})
       this.setState({search_result: undefined})
+      this.setState({search:false})
+    }
+
+    search(){
+      if(this.state.search_text && this.state.search_type)
+        this.setState({search:true, warning:'hide', error: ''})
+        else {
+          this.setState({warning:'show', error: 'Please check the form data.'})
+        }
     }
 
     render() {
@@ -91,12 +92,12 @@ class SearchFormComponent extends Component {
 
                 <div className="mx-auto">
                   {/* <button onClick={this.doSearch} className="btn btn-primary" disabled={this.state.disable_search}>Search</button> */}
-                  <button className="btn btn-primary" disabled={this.state.disable_search}>Search</button>
+                  <button onClick={this.search} className="btn btn-primary" disabled={this.state.disable_search}>Search</button>
                 </div>
 
                 <div className="col-sm-12">
                   {
-                    (this.state.search_text) && (this.state.search_type) &&
+                    (this.state.search) &&
                       <SearchResultComponent search_text={this.state.search_text} search_type={this.state.search_type} />
                   }
                   
