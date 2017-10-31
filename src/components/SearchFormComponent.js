@@ -28,7 +28,7 @@ class SearchFormComponent extends Component {
       this.search = this.search.bind(this)
     }
 
-    componentWillMount(){
+    componentDidMount(){
       if((this.props.match && this.props.match.params.type && this.props.match.params.search_text)){
         this.setState({search_type: this.props.match.params.type})
         this.setState({search_text: this.props.match.params.search_text})
@@ -54,7 +54,7 @@ class SearchFormComponent extends Component {
     }
 
     search(){
-      if(this.state.search_text && this.state.search_type)
+      if((this.state.search_text && this.state.search_type) || (this.props.match.params.type && this.props.match.params.search_text))
         this.setState({search:true, warning:'hide', error: ''})
       else {
         this.setState({warning:'show', error: 'Please check the form data.'})
