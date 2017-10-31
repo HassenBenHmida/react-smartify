@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import ArtistComponent from './ArtistComponent'
 import AlbumComponent from './AlbumComponent'
 import TrackComponent from './TrackComponent'
-import ErrorComponent from './ErrorComponent'
 import {search} from '../lib/SpotifyUtil';
 
 class searchResultComponent extends Component{
@@ -17,7 +16,7 @@ class searchResultComponent extends Component{
     }
 
     doSearch() {
-        search(this.props.search_text.toString(), this.props.search_type.toString()).then(
+        search(this.props.search_text, this.props.search_type).then(
           json => {
             this.setState({search_result: json})
         })
@@ -51,7 +50,7 @@ class searchResultComponent extends Component{
 
                 {
                   (!this.state.search_result) && 
-                    <ErrorComponent />
+                    <div>Loading ...</div>
                 }
               
           </div>
