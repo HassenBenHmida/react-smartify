@@ -31,10 +31,44 @@ class AlbumComponent extends Component {
         
         let accordian_id = "accordion-albums"
         let parent_id = "#accordion-albums"
-        if(artist_id) {
-            // console.log(artist_id)
-            // accordian_id = "accordion-albums-" +  artist_id.toString()
-            // parent_id = "#accordion-albums-" +  artist_id.toString()
+        
+        if(artist_id){
+            return(
+                <div key={"accordion-albumof"+artist_id.toString()} id={"accordion-albumof"+artist_id.toString()} role="tablist">
+                    {
+                    albums.map((album) => (
+                            <div key={album.id.toString()} className="card">
+                                <div className="card-header" role="tab" id={("card-header-" + album.id.toString()).replace(/ /g,'')}>
+                                    <h5 className="mb-0">
+                                        <a data-toggle="collapse" href={"#tabpanel-" + album.id.toString()} onClick={this.getTracksList.bind(this, album.id)} aria-controls={"tabpanel-" + album.id.toString()}>
+                                        {album.name}
+                                        </a>
+                                    </h5>
+                                </div>
+
+                                <div id={"tabpanel-" + album.id.toString()} className="collapse" role="tabpanel" aria-labelledby={("card-header-" + album.id.toString()).replace(/ /g,'')} data-parent={"#accordion-albumof"+artist_id.toString()}>
+                                    <div className="card-body">
+                                        {
+                                            (album.id === this.state.album_id && this.state.tracks_result) ? 
+                                                <TrackComponent 
+                                                tracks_result = {(this.state.tracks_result) ? this.state.tracks_result : null}
+                                                album_id = {(this.state.album_id) ? this.state.album_id : null}
+                                                album_name = {(this.state.album_name) ? this.state.album_name : null}
+                                                artist_id = {artist_id} /> :
+                                                <div id="spinner" className="text-center">
+                                                    <i className="fa fa-spinner fa-spin"></i>
+                                                </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                    ))
+                    }
+                </div>
+            )
+        }
+        //old
+        /* if(artist_id) {
             return (
                 <div className="container">
                     <div className="list-group">
@@ -57,7 +91,7 @@ class AlbumComponent extends Component {
                     </div>
                 </div>
             )
-        }
+        } */
 
         return (
             <div className="container">

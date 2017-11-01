@@ -15,7 +15,30 @@ class TrackComponent extends Component {
     }
 
     tracksList(tracks, album_id, album_name, artist_id){
-        return (
+        return(
+            <div key={"accordion-tracksof"+album_id.toString()} id={"accordion-tracksof"+album_id.toString()} role="tablist">
+                {
+                    tracks.map((track) => (
+                        <div key={track.id.toString()} className="card">
+                            <div className="card-header" role="tab" id={("card-header-" + track.id.toString()).replace(/ /g,'')}>
+                                <h5 className="mb-0">
+                                    <a data-toggle="collapse" href={"#tabpanel-" + track.id.toString()} aria-controls={"tabpanel-" + track.id.toString()}>
+                                    {track.name}
+                                    </a>
+                                </h5>
+                            </div>
+
+                            <div id={"tabpanel-" + track.id.toString()} className="collapse" role="tabpanel" aria-labelledby={("card-header-" + track.id.toString()).replace(/ /g,'')} data-parent={"#accordion-tracksof"+album_id.toString()}>
+                                <div className="card-body">
+                                    {track.name}
+                                </div>
+                            </div>
+                        </div>
+                ))
+                }
+            </div>
+        )
+        /* return (
             <div className="modal fade" id={"tracks_list" + artist_id.toString()} tabIndex="-1" role="dialog" aria-labelledby="aria" aria-hidden="true">
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
@@ -39,7 +62,7 @@ class TrackComponent extends Component {
                     </div>
                 </div>
             </div>
-        )
+        ) */
     }
 
     TracksNamesAccordian(tracks){
