@@ -11,6 +11,9 @@ class TrackComponent extends Component {
     tracksNames(tracks, album_id = "NoSpecificAlbum"){
         return (
             <div key={album_id.toString()} id={'accordianTrack-Of' + album_id.toString()} role="tablist">
+                <div className="alert alert-secondary" role="alert">
+                    Tracks List
+                </div>
                 {
                     tracks.map((track) => (
                         <div key={track.id.toString()} className="card">
@@ -54,15 +57,6 @@ class TrackComponent extends Component {
                 <i className="fa fa-spinner fa-spin"></i>
             </div>
         )
-        /*
-        if(this.props.tracks){
-            let tracks = JSON.parse(this.props.tracks) 
-            return this.TracksNamesAccordian(tracks)
-        }else{
-            return (
-                this.tracksList(this.props.tracks_result, this.props.album_id, this.props.album_name, this.props.artist_id)
-            );
-        } */
     }
 }
 

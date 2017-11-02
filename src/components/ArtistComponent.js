@@ -54,11 +54,14 @@ class ArtistComponent extends Component {
         return (
             <div className="col-sm-12">
                 <div id="accordion-artist" role="tablist">
-                {
-                    artists.map(artist => (
-                        this.artistData(artist)
-                    ))
-                }
+                    <div className="alert alert-secondary" role="alert">
+                        Artists List
+                    </div>
+                    {
+                        artists.map(artist => (
+                            this.artistData(artist)
+                        ))
+                    }
                 </div>
             </div>
         );

@@ -52,6 +52,9 @@ class SearchFormComponent extends Component {
       this.setState({search_type: e.target.value})
       this.setState({search_result: undefined})
       this.setState({search:false})
+      if(this.state.search_text){
+        this.setState({disable_search:false, warning:'hide', error: ''})
+      }
     }
 
     search(search_type = null, search_text = null){

@@ -27,6 +27,9 @@ class AlbumComponent extends Component {
     albumsNames(albums, artist_id = 'noSpecificArtist'){
         return (
             <div key={artist_id.toString()} id={'accordianAlbum-Of' + artist_id.toString()} role="tablist">
+                <div className="alert alert-secondary" role="alert">
+                    Albums List
+                </div>
                 {
                     albums.map((album) => (
                         <div key={album.id.toString()} className="card">
