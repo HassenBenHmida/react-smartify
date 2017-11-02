@@ -8,6 +8,17 @@ class TrackComponent extends Component {
         }
     }
     
+    routerHandler(track_id){
+        let path = this.props.location.pathname
+        var n = path.lastIndexOf('/tra_id/')
+        if(n > -1){
+            let result = path.substring(0, n)
+            this.props.history.push(result+"/tra_id/"+track_id)
+        }else{
+            this.props.history.push(path+"/tra_id/"+track_id)
+        }
+    }
+
     tracksNames(tracks, album_id = "NoSpecificAlbum"){
         return (
             <div key={album_id.toString()} id={'accordianTrack-Of' + album_id.toString()} role="tablist">
@@ -19,7 +30,7 @@ class TrackComponent extends Component {
                         <div key={track.id.toString()} className="card">
                             <div className="card-header" role="tab" id={("card-header-" + track.id.toString()).replace(/ /g,'')}>
                                 <h5 className="mb-0">
-                                    <a data-toggle="collapse" href={"#tabpanel-" + track.id.toString()} aria-controls={"tabpanel-" + track.id.toString()}>
+                                    <a data-toggle="collapse" href={"#tabpanel-" + track.id.toString()} onClick={this.routerHandler.bind(this, track.id)} aria-controls={"tabpanel-" + track.id.toString()}>
                                     {track.name}
                                     </a>
                                 </h5>

@@ -62,10 +62,10 @@ class searchResultComponent extends Component{
                       <Route path='/search/artist/:search_text' render={(props) => (
                         <ArtistComponent {...props} artists={JSON.stringify(this.state.search_result.artists.items)} />
                       )}/>
-                      <Route path="/search/album/" render={(props) => (
+                      <Route path="/search/album/:search_text" render={(props) => (
                         <AlbumComponent {...props} albums={JSON.stringify(this.state.search_result.albums.items)} />
                       )}/>
-                      <Route path="/search/track/" render={(props) => (
+                      <Route path="/search/track/:search_text" render={(props) => (
                         <TrackComponent {...props} tracks={JSON.stringify(this.state.search_result.tracks.items)} />
                       )}/>
                     </Switch>

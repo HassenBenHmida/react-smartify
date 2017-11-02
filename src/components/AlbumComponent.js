@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {getSongsByAlbum} from '../lib/SpotifyUtil';
 import TrackComponent from './TrackComponent';
+import { Route } from 'react-router-dom';
 class AlbumComponent extends Component {
 
     constructor(props){
@@ -14,7 +15,19 @@ class AlbumComponent extends Component {
         this.albumsNames = this.albumsNames.bind(this)
     }
 
+    routerHandler(album_id){
+        let path = this.props.location.pathname
+        var n = path.lastIndexOf('/alb_id/')
+        if(n > -1){
+            let result = path.substring(0, n)
+            this.props.history.push(result+"/alb_id/"+album_id)
+        }else{
+            this.props.history.push(path+"/alb_id/"+album_id)
+        }
+    }
+
     getTracksList(album_id, album_name, event){
+        this.routerHandler(album_id)
         this.setState({tracks_result: undefined})
         this.setState({album_id: album_id})
         this.setState({album_name: album_name})
@@ -45,11 +58,13 @@ class AlbumComponent extends Component {
                                 <div className="card-body">
                                     {
                                         (album.id === this.state.album_id && this.state.tracks_result) ? 
-                                            <TrackComponent 
-                                            tracks = {(this.state.tracks_result) ? this.state.tracks_result : null}
-                                            album_id = {(this.state.album_id) ? this.state.album_id : null}
-                                            album_name = {(this.state.album_name) ? this.state.album_name : null}
-                                            artist_id = {artist_id} /> :
+                                            <Route path='/search/artist/:search_text' render={(props) => (
+                                                <TrackComponent {...props} 
+                                                    tracks={(this.state.tracks_result) ? JSON.stringify(this.state.tracks_result) : null} 
+                                                    album_id = {(this.state.album_id) ? this.state.album_id : null}
+                                                    album_name = {(this.state.album_name) ? this.state.album_name : null} 
+                                                    artist_id = {artist_id} />
+                                            )}/> :
                                             <div id="spinner" className="text-center">
                                                 <i className="fa fa-spinner fa-spin"></i>
                                             </div>
