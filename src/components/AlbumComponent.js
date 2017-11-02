@@ -58,7 +58,7 @@ class AlbumComponent extends Component {
                                 <div className="card-body">
                                     {
                                         (album.id === this.state.album_id && this.state.tracks_result) ? 
-                                            <Route path='/search/artist/:search_text' render={(props) => (
+                                            <Route path='/search/:search_type/:search_text' render={(props) => (
                                                 <TrackComponent {...props} 
                                                     tracks={(this.state.tracks_result) ? JSON.stringify(this.state.tracks_result) : null} 
                                                     album_id = {(this.state.album_id) ? this.state.album_id : null}
