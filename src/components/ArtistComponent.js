@@ -10,10 +10,6 @@ class ArtistComponent extends Component {
             artist_id:undefined
         }
     }
-    
-    componentWillMount(){
-        console.log(this.props)
-    }
 
     getAlbumsList(artist_id, event){
         if(artist_id !== this.state.artist_id){

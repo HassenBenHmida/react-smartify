@@ -43,7 +43,7 @@ class AlbumComponent extends Component {
                                     {
                                         (album.id === this.state.album_id && this.state.tracks_result) ? 
                                             <TrackComponent 
-                                            tracks_result = {(this.state.tracks_result) ? this.state.tracks_result : null}
+                                            tracks = {(this.state.tracks_result) ? this.state.tracks_result : null}
                                             album_id = {(this.state.album_id) ? this.state.album_id : null}
                                             album_name = {(this.state.album_name) ? this.state.album_name : null}
                                             artist_id = {artist_id} /> :
