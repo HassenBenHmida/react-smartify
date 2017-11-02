@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import SearchResultComponent from './SearchResultComponent';
+import { Route } from 'react-router-dom';
 
 function AlertWarning(props){
   return (
@@ -28,11 +29,11 @@ class SearchFormComponent extends Component {
       this.search = this.search.bind(this)
     }
 
-    componentDidMount(){
-      if((this.props.match && this.props.match.params.type && this.props.match.params.search_text)){
-        this.setState({search_type: this.props.match.params.type})
+    componentWillMount(){
+      if((this.props.match && this.props.match.params.search_type && this.props.match.params.search_text)){
+        this.setState({search_type: this.props.match.params.search_type})
         this.setState({search_text: this.props.match.params.search_text})
-        this.search()
+        this.search(this.props.match.params.search_type, this.props.match.params.search_text)
       }
     }
 
@@ -53,10 +54,14 @@ class SearchFormComponent extends Component {
       this.setState({search:false})
     }
 
-    search(){
-      if((this.state.search_text && this.state.search_type) || (this.props.match.params.type && this.props.match.params.search_text))
+    search(search_type = null, search_text = null){
+      if(search_type && search_text){
         this.setState({search:true, warning:'hide', error: ''})
-      else {
+        this.props.history.push('/search/'+search_type+'/'+search_text)
+      }else if(this.state.search_text && this.state.search_type){
+        this.setState({search:true, warning:'hide', error: ''})
+        this.props.history.push('/search/'+this.state.search_type+'/'+this.state.search_text)
+      }else{
         this.setState({warning:'show', error: 'Please check the form data.'})
       }
     }
@@ -97,7 +102,9 @@ class SearchFormComponent extends Component {
                 <div className="col-sm-12">
                   {
                     (this.state.search) &&
-                      <SearchResultComponent search_text={this.state.search_text} search_type={this.state.search_type} />
+                      <Route path={"/search/:search_type/:search_text"} component={SearchResultComponent}></Route>
+
+                      //<SearchResultComponent search_text={this.state.search_text} search_type={this.state.search_type} />
                   }
                   
                 </div>

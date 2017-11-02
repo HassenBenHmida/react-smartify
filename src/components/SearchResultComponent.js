@@ -4,20 +4,22 @@ import AlbumComponent from './AlbumComponent'
 import TrackComponent from './TrackComponent'
 import {search} from '../lib/SpotifyUtil';
 import 'font-awesome/css/font-awesome.min.css';
-
+import { Switch, Route } from 'react-router-dom';
 class searchResultComponent extends Component{
     constructor(props){
       super(props)
       this.state = {
         search_result: null,
-        component:undefined
+        component:undefined,
+        search_text:undefined,
+        search_type:undefined
       }
 
       this.doSearch = this.doSearch.bind(this)
     }
 
     doSearch() {
-        search(this.props.search_text, this.props.search_type).then(
+        search(this.state.search_text, this.state.search_type).then(
           json => {
             this.setState({search_result: json})
         })
@@ -25,7 +27,14 @@ class searchResultComponent extends Component{
 
     componentWillMount(){      
       let array_type = ['artist', 'album', 'track']
-      if(this.props.search_text && array_type.indexOf(this.props.search_type) !== -1){
+
+      if(this.props.match && (this.props.match.params.search_text && array_type.indexOf(this.props.match.params.search_type) !== -1)){
+        this.setState({search_text:this.props.match.params.search_text, search_type:this.props.match.params.search_type})
+      }
+    }
+
+    componentDidMount(){
+      if(this.state.search_text && this.state.search_type){
         this.doSearch()
       }
     }
@@ -47,19 +56,19 @@ class searchResultComponent extends Component{
       return (
         <div className="col-sm-12"><br />
           <div className="row">
-                {
-                  (this.state.search_result && this.props.search_type === 'artist') &&
-                    <ArtistComponent artists={this.state.search_result.artists.items} />
-                }
-
-                {
-                  (this.state.search_result && this.props.search_type === 'album') &&
-                    <AlbumComponent albums={this.state.search_result.albums.items} />
-                }
-
-                {
-                  (this.state.search_result && this.props.search_type === 'track') &&
-                    <TrackComponent tracks={this.state.search_result.tracks.items} />
+                {   
+                    (this.state.search_result) &&
+                    <Switch>
+                      <Route path='/search/artist/:search_text' render={(props) => (
+                        <ArtistComponent {...props} artists={JSON.stringify(this.state.search_result.artists.items)} />
+                      )}/>
+                      <Route path="/search/album/" render={(props) => (
+                        <AlbumComponent {...props} albums={JSON.stringify(this.state.search_result.albums.items)} />
+                      )}/>
+                      <Route path="/search/track/" render={(props) => (
+                        <TrackComponent {...props} tracks={JSON.stringify(this.state.search_result.tracks.items)} />
+                      )}/>
+                    </Switch>
                 }
                 <div id="loading" className="col-sm-12">
                 {

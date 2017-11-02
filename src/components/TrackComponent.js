@@ -38,31 +38,6 @@ class TrackComponent extends Component {
                 }
             </div>
         )
-        /* return (
-            <div className="modal fade" id={"tracks_list" + artist_id.toString()} tabIndex="-1" role="dialog" aria-labelledby="aria" aria-hidden="true">
-                <div className="modal-dialog" role="document">
-                    <div className="modal-content">
-                    <div className="modal-header">
-                        <h5 className="modal-title" id="aria">{(album_name) ? album_name : null} Songs' list</h5>
-                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div className="modal-body">
-                        <ul>
-                            {(tracks) ? this.TracksNames(tracks) : 
-                                <div id="spinner" className="text-center">
-                                    <i className="fa fa-spinner fa-spin"></i>
-                                </div>}
-                        </ul>
-                    </div>
-                    <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                    </div>
-                </div>
-            </div>
-        ) */
     }
 
     TracksNamesAccordian(tracks){
@@ -95,8 +70,9 @@ class TrackComponent extends Component {
     
 
     render(){
-        if(this.props.tracks){ 
-            return this.TracksNamesAccordian(this.props.tracks)
+        if(this.props.tracks){
+            let tracks = JSON.parse(this.props.tracks) 
+            return this.TracksNamesAccordian(tracks)
         }else{
             return (
                 this.tracksList(this.props.tracks_result, this.props.album_id, this.props.album_name, this.props.artist_id)

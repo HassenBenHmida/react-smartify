@@ -11,6 +11,10 @@ class ArtistComponent extends Component {
         }
     }
     
+    componentWillMount(){
+        console.log(this.props)
+    }
+
     getAlbumsList(artist_id, event){
         if(artist_id !== this.state.artist_id){
             this.setState({albums_result: undefined})
@@ -37,7 +41,7 @@ class ArtistComponent extends Component {
                 <div id={"tabpanel-" + artist.id.toString()} className="collapse" role="tabpanel" aria-labelledby={("card-header-" + artist.id.toString()).replace(/ /g,'')} data-parent="#accordion-artist">
                     <div className="card-body">
                         {
-                            (this.state.artist_id === artist.id && this.state.albums_result) ? <AlbumComponent albumsFromArtist={this.state.albums_result} artist_id={artist.id} /> : 
+                            (this.state.artist_id === artist.id && this.state.albums_result) ? <AlbumComponent albums={this.state.albums_result} artist_id={artist.id} /> : 
                                 <div id="spinner" className="text-center">
                                     <i className="fa fa-spinner fa-spin"></i>
                                 </div>
@@ -49,11 +53,13 @@ class ArtistComponent extends Component {
     }
 
     render(){
+        let artists = JSON.parse(this.props.artists) 
+        
         return (
             <div className="col-sm-12">
                 <div id="accordion-artist" role="tablist">
                 {
-                    this.props.artists.map(artist => (
+                    artists.map(artist => (
                         this.artistData(artist)
                     ))
                 }
