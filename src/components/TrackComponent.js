@@ -7,65 +7,43 @@ class TrackComponent extends Component {
 
         }
     }
-    
-    routerHandler(track_id){
-        let path = this.props.location.pathname
-        var n = path.lastIndexOf('/tra_id/')
-        if(n > -1){
-            let result = path.substring(0, n)
-            this.props.history.push(result+"/tra_id/"+track_id)
-        }else{
-            this.props.history.push(path+"/tra_id/"+track_id)
-        }
-    }
 
-    tracksNames(tracks, album_id = "NoSpecificAlbum"){
-        return (
-            <div key={album_id.toString()} id={'accordianTrack-Of' + album_id.toString()} role="tablist">
-                <div className="alert alert-secondary" role="alert">
-                    Tracks List
-                </div>
-                {
-                    tracks.map((track) => (
-                        <div key={track.id.toString()} className="card">
-                            <div className="card-header" role="tab" id={("card-header-" + track.id.toString()).replace(/ /g,'')}>
-                                <h5 className="mb-0">
-                                    <a data-toggle="collapse" href={"#tabpanel-" + track.id.toString()} onClick={this.routerHandler.bind(this, track.id)} aria-controls={"tabpanel-" + track.id.toString()}>
-                                    {track.name}
-                                    </a>
-                                </h5>
-                            </div>
-
-                            <div id={"tabpanel-" + track.id.toString()} className="collapse" role="tabpanel" aria-labelledby={("card-header-" + track.id.toString()).replace(/ /g,'')} data-parent={'#accordianTrack-Of' + album_id.toString()}>
-                                <div className="card-body">
-                                    {track.name}
-                                </div>
-                            </div>
-                        </div>
-                    ))
-                }
-            </div>
-        )
+    routeHandler(){
+        this.props.match.params.tra_id = this.props.id
+        let search_text = this.props.match.params.search_text
+        let search_type = this.props.match.params.search_type
+        let art_id = (search_type === "artist") ? this.props.match.params.art_id+"/" : ""
+        let alb_id = (search_type === "track") ? "" : this.props.match.params.alb_id+"/"
+        this.props.history.push("/search/"+search_type+"/"+search_text+"/"+art_id+alb_id+this.props.id+"/")
     }
 
     render(){
-        if(this.props.tracks){
-            let tracks = this.props.tracks
-            
-            if(typeof this.props.tracks === 'string'){
-                tracks = JSON.parse(this.props.tracks)  
-            }
-            
-            return (
-                    <div className="col-sm-12">
-                        {this.tracksNames(tracks, this.props.album_id)}
-                    </div>
-                )
-        }
-
         return (
-            <div id="spinner" className="text-center">
-                <i className="fa fa-spinner fa-spin"></i>
+            <div className="card">
+                <div className="card-header" role="tab" id={("card-header" + this.props.id.toString()).replace(/ /g,'')}>
+                    <h5 className="mb-0">
+                        <a data-toggle="collapse" aria-expanded={this.props.aria_expanded} href={"#tabpanel-" + this.props.id.toString()} onClick={this.routeHandler.bind(this)} aria-controls={"tabpanel-" + this.props.id.toString()}>
+                        {this.props.name}
+                        </a>
+                    </h5>
+                </div>
+
+                <div id={"tabpanel-" + this.props.id.toString()} className={(this.props.aria_expanded ===true) ? 'collapse show' : "collapse"} role="tabpanel" aria-labelledby={("card-header-" + this.props.id.toString()).replace(/ /g,'')} data-parent={this.props.accordion}>
+                    <div className="card-body">
+
+                        {/* Track Card */}
+                        <div className="card">
+                            <div className="card-body">
+                                <h4 className="card-title">{this.props.name}</h4>
+                                {(this.props.duration_ms) ? <h6 className="card-subtitle mb-2 text-muted">Duration : {~~(this.props.duration_ms/1000)}s</h6> : null}
+                                <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                <a href={this.props.href} className="btn btn-primary">Link</a>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
             </div>
         )
     }

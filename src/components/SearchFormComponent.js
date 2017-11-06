@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import SearchResultComponent from './SearchResultComponent';
-import { Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 
 function AlertWarning(props){
   return (
@@ -21,7 +21,10 @@ class SearchFormComponent extends Component {
         search: false,
         disable_search: true,
         warning: 'hide',
-        error:''
+        error:'',
+        tra_id:undefined,
+        alb_id:undefined,
+        art_id:undefined
       }
       
       this.handleSelectChange = this.handleSelectChange.bind(this);
@@ -29,11 +32,24 @@ class SearchFormComponent extends Component {
       this.search = this.search.bind(this)
     }
 
-    componentWillMount(){
+    componentDidMount(){
+
       if((this.props.match && this.props.match.params.search_type && this.props.match.params.search_text)){
+
         this.setState({search_type: this.props.match.params.search_type})
         this.setState({search_text: this.props.match.params.search_text})
-        this.search(this.props.match.params.search_type, this.props.match.params.search_text)
+
+        if(this.props.match.params.art_id){
+          this.setState({art_id: this.props.match.params.art_id})
+        }
+        if(this.props.match.params.alb_id){
+          this.setState({alb_id: this.props.match.params.alb_id})
+        }
+        if(this.props.match.params.tra_id){
+          this.setState({tra_id: this.props.match.params.tra_id})
+        }
+
+        this.search(this.props.match.params.search_type, this.props.match.params.search_text, true)
       }
     }
 
@@ -57,13 +73,28 @@ class SearchFormComponent extends Component {
       }
     }
 
-    search(search_type = null, search_text = null){
-      if(search_type && search_text){
+    search(search_type = null, search_text = null, keepRoute = false){
+      //keepRoute => if the user click on the button search the route will be /search/text/type
+      //if this function was triggred by the route => keep the params of route
+
+      let array_type = ['artist', 'album', 'track']
+      
+      if((search_type && search_text) || (this.state.search_text && this.state.search_type)){
+        search_type = (search_type && array_type.indexOf(search_type) !== -1) ? search_type : this.state.search_type
+        search_text = (search_text) ? search_text : this.state.search_text
+
+
         this.setState({search:true, warning:'hide', error: ''})
-        this.props.history.push('/search/'+search_type+'/'+search_text)
-      }else if(this.state.search_text && this.state.search_type){
-        this.setState({search:true, warning:'hide', error: ''})
-        this.props.history.push('/search/'+this.state.search_type+'/'+this.state.search_text)
+        this.props.history.push('/search/'+search_type+'/'+search_text+'/')
+        if(this.props.match.params.art_id && keepRoute){
+          this.props.history.push(this.props.match.params.art_id+'/')
+          if(this.props.match.params.alb_id){
+            this.props.history.push(this.props.match.params.alb_id+'/')
+            if(this.props.match.params.tra_id){
+              this.props.history.push(this.props.match.params.tra_id)
+            }
+          }
+        }
       }else{
         this.setState({warning:'show', error: 'Please check the form data.'})
       }
@@ -105,8 +136,12 @@ class SearchFormComponent extends Component {
                 <div className="col-sm-12">
                   {
                     (this.state.search) &&
-                      <Route path={"/search/:search_type/:search_text"} component={SearchResultComponent}></Route>
-
+                    <Switch>
+                      {(this.state.search_type === "track") ? <Route path='/search/:search_type/:search_text/:tra_id?' component={SearchResultComponent}/> : null}
+                      {(this.state.search_type === "album") ? <Route path='/search/:search_type/:search_text/:alb_id?/:tra_id?' component={SearchResultComponent}/> : null}
+                      {(this.state.search_type === "artist") ? <Route path='/search/:search_type/:search_text/:art_id?/:alb_id?/:tra_id?' component={SearchResultComponent}/> : null}
+                      {/* <Route path='/search/:search_type/:search_text/:art_id?/:alb_id?/:tra_id?' component={SearchResultComponent}/> */}
+                    </Switch>
                       //<SearchResultComponent search_text={this.state.search_text} search_type={this.state.search_type} />
                   }
                   
