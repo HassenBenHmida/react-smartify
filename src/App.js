@@ -17,10 +17,6 @@ class App extends Component {
             <Route path='/' exact component={SearchFormComponent}/>
             <Route component={ErrorComponent}/>
           </Switch>
-        {/* <Route path="/search/artist/:search_text" exact component={ArtistComponent}></Route> 
-        /search?/:search_type?/:search_text?/art_id?/:art_id?/alb_id?/:alb_id?/tra_id?/:tra_id?/
-        <Route path="/search/album/:search_text" exact component={AlbumComponent}></Route>
-        <Route path="/search/track/:search_text" exact component={TrackComponent}></Route> */}
       </div>
     );
   }

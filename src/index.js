@@ -6,7 +6,15 @@ import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<BrowserRouter>
-                    <Route path="/" component={App}></Route>
-                </BrowserRouter>, document.getElementById('root'));
+import { Provider } from 'react-redux'
+//import { createStore } from 'redux'
+import { store } from './reducers/reducers'
+
+//let store = createStore(smartifyApp)
+
+ReactDOM.render(<Provider store={store}>
+                    <BrowserRouter>
+                        <Route path="/" component={App}></Route>
+                    </BrowserRouter>
+                </Provider>, document.getElementById('root'));
 registerServiceWorker();
