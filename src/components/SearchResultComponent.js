@@ -87,6 +87,7 @@ class searchResultComponent extends Component{
                     (this.state.search_result) && (this.state.component) &&
                       this.state.search_result.map((item, key) => (
                           <this.state.component {...this.props} 
+                                                object={JSON.stringify(item)}
                                                 aria_expanded={this.state.idofthis === item.id ? true : false}
                                                 imageOfThis={(item.images && item.images[0]) ? item.images[0].url : null}
                                                 href={(item.href) ? item.href : null}

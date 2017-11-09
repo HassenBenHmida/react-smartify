@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { addFavorite, removeFavorite } from '../actions/actions'
+import { addFavorite, removeFavorite } from '../actions'
 
 class TrackComponent extends Component {
     
@@ -10,16 +10,6 @@ class TrackComponent extends Component {
             
         }
     }
-/*
-    componentWillReceiveProps(){
-        console.log(this.props.tracks)
-        console.log(this.props.id)
-        if(this.props.tracks && this.props.tracks.indexOf(this.props.id) > -1){
-            this.setState({inFavorite:true})
-        }else{
-            this.setState({inFavorite:false})
-        }
-    }*/
 
     routeHandler(){
         this.props.match.params.tra_id = this.props.id
@@ -32,7 +22,7 @@ class TrackComponent extends Component {
 
 
     render(){
-        //console.log(this.props)
+        //console.log(this.props.object)
                 
         return (
             <div className="card">
@@ -52,15 +42,9 @@ class TrackComponent extends Component {
                             <div className="card-body">
                                 <div className="float-sm-right">
                                     {
-                                        (this.props.tracks && this.props.tracks.indexOf(this.props.id) > -1) ?
-                                            <button onClick={() => this.props.removeFavorite(this.props.id)}>
-                                                <i className="fa fa-heart"></i>
-                                            </button>
-                                        :
-                                            <button onClick={() => this.props.addFavorite(this.props.id)}>
-                                                <i className="fa fa-heart-o"></i>
-                                            </button>
-                                            
+                                        <button onClick={() => (this.props.tracks.indexOf(this.props.object) > -1) ? this.props.removeFavorite(this.props.object) : this.props.addFavorite(this.props.object)}>
+                                            <i className={(this.props.tracks.indexOf(this.props.object) > -1) ? "fa fa-heart" : "fa fa-heart-o"}></i>
+                                        </button>
                                     }
                                 </div>
                                 <h4 className="card-title">{this.props.name}</h4>
@@ -79,7 +63,7 @@ class TrackComponent extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({  
-    tracks: state.smartifyApp,
+    tracks: state.tracksReducerHandler,
 });
   
 const mapDispatchToProps = {  
@@ -91,9 +75,5 @@ TrackComponent = connect(
     mapStateToProps,
     mapDispatchToProps
 )(TrackComponent);
-/* TrackComponent = connect(
-    state => state,
-    dispatch => bindActionCreators({addFavorite, removeFavorite}, dispatch)
-  )(TrackComponent) */
-//TrackComponent = connect()(TrackComponent)
+
 export default TrackComponent;

@@ -52,6 +52,7 @@ class AlbumComponent extends Component {
                         {
                         this.state.tracks_result.map((item, key) => (
                             <TrackComponent {...this.props} 
+                                            object={JSON.stringify(item)}
                                             aria_expanded={this.props.match.params.tra_id === item.id ? true : false}
                                             href={(item.href) ? item.href : null}
                                             duration_ms={(item.duration_ms) ? item.duration_ms : null}
