@@ -24,8 +24,6 @@ class TrackComponent extends Component {
 
 
     render(){
-        //console.log(this.props.object)
-                
         return (
             <div className="card">
                 <div className="card-header" role="tab" id={("card-header" + this.props.id.toString()).replace(/ /g,'')}>
