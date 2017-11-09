@@ -12,12 +12,14 @@ class TrackComponent extends Component {
     }
 
     routeHandler(){
-        this.props.match.params.tra_id = this.props.id
-        let search_text = this.props.match.params.search_text
-        let search_type = this.props.match.params.search_type
-        let art_id = (search_type === "artist") ? this.props.match.params.art_id+"/" : ""
-        let alb_id = (search_type === "track") ? "" : this.props.match.params.alb_id+"/"
-        this.props.history.push("/search/"+search_type+"/"+search_text+"/"+art_id+alb_id+this.props.id+"/")
+        if(this.props.match){//show error without this condition in FavoritesComponent
+            this.props.match.params.tra_id = this.props.id
+            let search_text = this.props.match.params.search_text
+            let search_type = this.props.match.params.search_type
+            let art_id = (search_type === "artist") ? this.props.match.params.art_id+"/" : ""
+            let alb_id = (search_type === "track") ? "" : this.props.match.params.alb_id+"/"
+            this.props.history.push("/search/"+search_type+"/"+search_text+"/"+art_id+alb_id+this.props.id+"/")
+        }
     }
 
 

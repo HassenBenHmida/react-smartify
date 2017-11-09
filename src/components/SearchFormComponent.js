@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import SearchResultComponent from './SearchResultComponent';
+import FavoritesComponent from './FavoritesComponent'
 import { Switch, Route } from 'react-router-dom';
 
 function AlertWarning(props){
@@ -103,7 +104,10 @@ class SearchFormComponent extends Component {
     render() {
       return (
         <div className="card">
-          <h4 className="card-header">Welcome To Smartify Application</h4>
+          <div className="card-header">
+            <h4 className="float-left">Welcome To Smartify Application</h4>
+            <div className="float-right"><FavoritesComponent /></div>
+          </div>
           <div className="card-body">
             <div className="card-text">
               <div className="row">

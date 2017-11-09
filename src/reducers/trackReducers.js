@@ -7,7 +7,6 @@ import {
   } from 'redux';
 
 function tracksReducerHandler(state = {}, action) {
-    console.log(state)
     switch (action.type) {
         case ADD_FAVORITE:
             return [...state, action.track]
