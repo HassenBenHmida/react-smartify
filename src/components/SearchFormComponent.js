@@ -7,7 +7,7 @@ class SearchFormComponent extends Component {
     constructor(props) {
       super(props)
 
-      let array_type = ['artist', 'album', 'track']
+      let array_type = ['artist', 'album', 'track'] //if the params of search type isn't one of these the state will contain nothing
 
       this.state = {
         search_text: (this.props.match.params.search_text) ? this.props.match.params.search_text : '',
