@@ -12,10 +12,8 @@ class SearchFormComponent extends Component {
       this.state = {
         search_text: this.props.match.params.search_text || '',
         search_type: (this.props.match.params.search_type)&&(array_type.indexOf(this.props.match.params.search_type) !== -1) ? this.props.match.params.search_type : '',
-        search: ((this.props.match.params.search_text) && (this.props.match.params.search_type))
+        search: ((this.props.match.params.search_text) && (this.props.match.params.search_type) && (array_type.indexOf(this.props.match.params.search_type) !== -1))
       }
-      
-      this.search = this.search.bind(this)
     }
 
     search(){
