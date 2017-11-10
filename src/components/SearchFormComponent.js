@@ -10,15 +10,15 @@ class SearchFormComponent extends Component {
       let array_type = ['artist', 'album', 'track'] //if the params of search type isn't one of these the state will contain nothing
 
       this.state = {
-        search_text: (this.props.match.params.search_text) ? this.props.match.params.search_text : '',
+        search_text: this.props.match.params.search_text || '',
         search_type: (this.props.match.params.search_type)&&(array_type.indexOf(this.props.match.params.search_type) !== -1) ? this.props.match.params.search_type : '',
-        search: ((this.props.match.params.search_text) && (this.props.match.params.search_type)) ? true : false
+        search: ((this.props.match.params.search_text) && (this.props.match.params.search_type))
       }
       
       this.search = this.search.bind(this)
     }
 
-    search(search_type = null, search_text = null){
+    search(){
       this.props.history.push('/search/'+this.state.search_type+'/'+this.state.search_text)
       this.setState({search:true})
     }
@@ -54,7 +54,7 @@ class SearchFormComponent extends Component {
                 </div>
 
                 <div className="mx-auto">
-                  <button onClick={this.search} className="btn btn-primary" disabled={!this.state.search_text || !this.state.search_type}>Search</button>
+                  <button onClick={(e) => this.search()} className="btn btn-primary" disabled={!this.state.search_text || !this.state.search_type}>Search</button>
                 </div>
 
                 <div className="col-sm-12">
