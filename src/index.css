@@ -1,14 +1,7 @@
-<<<<<<< HEAD
 .hide{
   display: none;
 }
 
 .show{
   display: block;
-=======
-body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
->>>>>>> base/zied/fixes
 }
