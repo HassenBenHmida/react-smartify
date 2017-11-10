@@ -3,22 +3,15 @@ import SearchResultComponent from './SearchResultComponent';
 import FavoritesComponent from './FavoritesComponent'
 import { Switch, Route } from 'react-router-dom';
 
-/* function AlertWarning(props){
-  return (
-    <div className="col-sm-12">
-      <div className={"alert alert-warning " + props.warning} role="alert">
-        {props.error}
-      </div>
-    </div>
-  )
-} */
-
 class SearchFormComponent extends Component {
     constructor(props) {
       super(props)
+
+      let array_type = ['artist', 'album', 'track']
+
       this.state = {
         search_text: (this.props.match.params.search_text) ? this.props.match.params.search_text : '',
-        search_type: (this.props.match.params.search_type) ? this.props.match.params.search_type : '',
+        search_type: (this.props.match.params.search_type)&&(array_type.indexOf(this.props.match.params.search_type) !== -1) ? this.props.match.params.search_type : '',
         search: ((this.props.match.params.search_text) && (this.props.match.params.search_type)) ? true : false
       }
       
@@ -31,7 +24,6 @@ class SearchFormComponent extends Component {
     }
 
     render() {
-      console.log(this.props.match.params)
       return (
         <div className="card">
           <div className="card-header">
@@ -62,7 +54,7 @@ class SearchFormComponent extends Component {
                 </div>
 
                 <div className="mx-auto">
-                  <button onClick={this.search} className="btn btn-primary" disabled={!this.state.search_text}>Search</button>
+                  <button onClick={this.search} className="btn btn-primary" disabled={!this.state.search_text || !this.state.search_type}>Search</button>
                 </div>
 
                 <div className="col-sm-12">
