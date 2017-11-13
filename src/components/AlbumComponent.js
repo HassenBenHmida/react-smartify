@@ -1,108 +1,109 @@
 import React, { Component } from 'react';
-import {getSongsByAlbum} from '../lib/SpotifyUtil';
+import {getAlbumsByArtist, search} from '../lib/SpotifyUtil';
 import TrackComponent from './TrackComponent';
+import { Route, Switch } from 'react-router-dom';
 class AlbumComponent extends Component {
 
     constructor(props){
         super(props)
         this.state = {
-          tracks_result:undefined
+          items:undefined,
+          selectedAlbum:undefined
         }
+
+        this.getAlbumsList()
     }
 
-    routeHandler(keepRoute){
-        //The user click on an artist item
-        // The route will change
-        this.props.match.params.alb_id = this.props.id
-        let search_text = this.props.match.params.search_text
-        let search_type = this.props.match.params.search_type
-        let art_id = (search_type === "artist") ? "/"+this.props.match.params.art_id+"/" : "/"
-        let tra_id = (this.props.match.params.tra_id && keepRoute) ? this.props.match.params.tra_id+"/" : ""
-        this.props.history.push("/search/"+search_type+"/"+search_text+art_id+this.props.id+"/"+tra_id)
-    }
-    getTracksList(){
-        //Search for the tracks
-        this.setState({tracks_result: undefined})
-        getSongsByAlbum(this.props.id).then(
-            json => {
-                this.setState({tracks_result: json.tracks.items})
+    doSearch() {
+        if(this.props.match.params.search_text){
+            search(this.props.match.params.search_text, 'album').then(
+                json => {
+                this.setState({items: json.albums.items})
             })
-    }
-
-    componentDidMount(){
-        if(this.props.aria_expanded){
-            this.getTracksList()
-            this.routeHandler(true)
         }
     }
 
-    openAlbumAccordian(){
-        this.getTracksList()
-        this.routeHandler(false)
+    getAlbumsList(){
+        //Search for albums
+        if(this.props.match.params.art_id){
+            getAlbumsByArtist(this.props.match.params.art_id).then(
+                json => {
+                    this.setState({items: json.items})
+                })
+        }else{
+            this.doSearch()
+        }
     }
 
-    trackAccordion(){
+    handleRouter(album_id){
+        if(this.props.history.location.pathname.includes('artist')){
+            this.props.history.push('/search/artist/' + this.props.match.params.search_text +'/'+ this.props.match.params.art_id + '/' +album_id)
+        }else{
+            this.props.history.push('/search/album/' + this.props.match.params.search_text +'/'+album_id)
+        }
+    } 
+
+    albumCard(album, dataparent, aria_expanded = false){
         return (
-            <div className="row">
-                <div className="col-sm-12">
-                    <div id={"accordion-track-"+this.props.id} role="tablist">
-                        <div className="alert alert-secondary" role="alert">
-                            Track List
+            <div className="card" key={album.id}>
+                <div className="card-header" role="tab" id={("card-header" + album.id.toString()).replace(/ /g,'')}>
+                    <h5 className="mb-0">
+                        <a data-toggle="collapse" aria-expanded={aria_expanded} href={"#tabpanel-" + album.id.toString()} onClick={(e) => this.handleRouter(album.id)} aria-controls={"tabpanel-" + album.id.toString()}>
+                        {album.name}
+                        </a>
+                    </h5>
+                </div>
+
+                <div id={"tabpanel-" + album.id.toString()} className={(aria_expanded === true) ? 'collapse show' : "collapse"} role="tabpanel" aria-labelledby={("card-header-" + album.id.toString()).replace(/ /g,'')} data-parent={dataparent}>
+                    <div className="card-body">
+
+                        <div className="card">
+                            {(album.imageOfThis) ? <img className="card-img-top" src={album.imageOfThis} alt={"Image : " + album.name} /> : null}
+                            <div className="card-body">
+                                <h4 className="card-title">{album.name}</h4>
+                                <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                <a href={album.href} className="btn btn-primary">Link</a>
+                            </div>
+                            <br />
+                            
+                            {
+                                (this.state.selectedAlbum === album.id || this.props.match.params.alb_id === album.id) ? //without this test all the track accordians will receive the same id (album id in the path) which generate an error => only the first track accordian can be opened 
+                                    <Switch>
+                                        <Route path='/search/artist/:search_text/:art_id?/:alb_id?/:tra_id?/' component={TrackComponent}/>
+                                        <Route path='/search/album/:search_text/:alb_id?/:tra_id?/' component={TrackComponent}/>
+                                    </Switch>
+                                : 
+                                    <div id="spinner" className="text-center">
+                                        <i className="fa fa-spinner fa-spin"></i>
+                                    </div>
+                            }
+
                         </div>
-                        {
-                        this.state.tracks_result.map((item, key) => (
-                            <TrackComponent {...this.props} 
-                                            object={JSON.stringify(item)}
-                                            aria_expanded={this.props.match.params.tra_id === item.id ? true : false}
-                                            href={(item.href) ? item.href : null}
-                                            duration_ms={(item.duration_ms) ? item.duration_ms : null}
-                                            key={key} 
-                                            id={item.id} 
-                                            name={item.name} 
-                                            accordion={'#accordion-track-'+this.props.id} />
-                        ))
-                        }
                     </div>
                 </div>
             </div>
         )
     }
-
     render(){
+        let accordian_id = (this.props.match.params.alb_id) ? "accordion-album-"+this.props.match.params.alb_id : "accordion-album"
         return (
-            <div className="card">
-                <div className="card-header" role="tab" id={("card-header" + this.props.id.toString()).replace(/ /g,'')}>
-                    <h5 className="mb-0">
-                        <a data-toggle="collapse" aria-expanded={this.props.aria_expanded} href={"#tabpanel-" + this.props.id.toString()} onClick={this.openAlbumAccordian.bind(this)} aria-controls={"tabpanel-" + this.props.id.toString()}>
-                        {this.props.name}
-                        </a>
-                    </h5>
-                </div>
-
-                <div id={"tabpanel-" + this.props.id.toString()} className={(this.props.aria_expanded ===true) ? 'collapse show' : "collapse"} role="tabpanel" aria-labelledby={("card-header-" + this.props.id.toString()).replace(/ /g,'')} data-parent={this.props.accordion}>
-                    <div className="card-body">
-
-                        <div className="card">
-                            {(this.props.imageOfThis) ? <img className="card-img-top" src={this.props.imageOfThis} alt={"Image : " + this.props.name} /> : null}
-                            <div className="card-body">
-                                <h4 className="card-title">{this.props.name}</h4>
-                                <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                <a href={this.props.href} className="btn btn-primary">Link</a>
-                            </div>
-                            <br />
-
-                            {
-                                (this.state.tracks_result) ? 
-                                    this.trackAccordion()
-                                    : 
-                                    <div id="spinner" className="text-center">
-                                        <i className="fa fa-spinner fa-spin"></i>
-                                    </div>
-                            }
+                <div className="col-sm-12">
+                    <div id={accordian_id} role="tablist">
+                        <div className="alert alert-secondary" role="alert">
+                            Album List
                         </div>
+                        {
+                            (this.state.items) ?
+                                this.state.items.map((item) => (
+                                    this.albumCard(item, "#"+accordian_id, this.props.match.params.alb_id === item.id)
+                                ))
+                            :
+                                <div id="spinner" className="text-center">
+                                    <i className="fa fa-spinner fa-spin"></i>
+                                </div>
+                        }
                     </div>
                 </div>
-            </div>
         )
     }
 

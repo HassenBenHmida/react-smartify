@@ -13,7 +13,7 @@ class App extends Component {
       <div className="App">
           {/* <Route exact path='/' component={SearchFormComponent}/> */}
           <Switch>
-            <Route path='/search/:search_type/:search_text/:art_id?/:alb_id?/:tra_id?' component={SearchFormComponent}/>
+            <Route path='/search/:search_type/:search_text/:art_id?/:alb_id?/:tra_id?/' component={SearchFormComponent}/>
             <Route path='/' exact component={SearchFormComponent}/>
             <Route component={ErrorComponent}/>
           </Switch>
