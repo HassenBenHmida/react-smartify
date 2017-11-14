@@ -1,3 +1,3 @@
-import {trackReducers} from './trackReducers'
+import { trackReducers } from './trackReducers';
 
-export {trackReducers}
+export { trackReducers };
