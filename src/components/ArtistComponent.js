@@ -12,9 +12,16 @@ class ArtistComponent extends Component {
         this.doSearch()
     }
 
-    doSearch() {
-        if(this.props.match.params.search_text){
-            search(this.props.match.params.search_text, 'artist').then(
+    componentWillReceiveProps(nextProps){ // DoSearch is called in the constructor = never called again when the component is displayed and we need to refresh it using another search text
+        if(this.props.match.params.search_text !== nextProps.match.params.search_text){
+            this.doSearch(nextProps.match.params.search_text)
+        }
+    }
+
+    doSearch(search_text = null) {
+        search_text = (!search_text) ? this.props.match.params.search_text : search_text
+        if(search_text){
+            search(search_text, 'artist').then(
                 json => {
                 this.setState({items: json.artists.items})
             })
@@ -64,7 +71,10 @@ class ArtistComponent extends Component {
         )
     }
 
+    
+    
     render(){
+        
         return (
                 <div className="col-sm-12">
                     {

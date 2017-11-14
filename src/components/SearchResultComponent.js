@@ -12,7 +12,7 @@ class searchResultComponent extends Component{
       }
     }
 
-    render() {
+    render() {    
       return (
         <div className="col-sm-12"><br />
           <div className="row">

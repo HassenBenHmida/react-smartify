@@ -14,16 +14,13 @@ class AlbumComponent extends Component {
         this.getAlbumsList()
     }
 
-    doSearch() {
-        if(this.props.match.params.search_text){
-            search(this.props.match.params.search_text, 'album').then(
-                json => {
-                this.setState({items: json.albums.items})
-            })
+    componentWillReceiveProps(nextProps){//same as the function in ArtistComponent
+        if(this.props.match.params.search_text !== nextProps.match.params.search_text){
+            this.getAlbumsList(nextProps.match.params.search_text)
         }
     }
 
-    getAlbumsList(){
+    getAlbumsList(search_text = null){
         //Search for albums
         if(this.props.match.params.art_id){
             getAlbumsByArtist(this.props.match.params.art_id).then(
@@ -31,17 +28,19 @@ class AlbumComponent extends Component {
                     this.setState({items: json.items})
                 })
         }else{
-            this.doSearch()
+            search_text = (!search_text) ? this.props.match.params.search_text : search_text
+            search(search_text, 'album').then(
+                json => {
+                this.setState({items: json.albums.items})
+            })
         }
     }
 
     handleRouter(album_id){
-        if(this.props.history.location.pathname.includes('artist')){
-            this.props.history.push('/search/artist/' + this.props.match.params.search_text +'/'+ this.props.match.params.art_id + '/' +album_id)
-        }else{
-            this.props.history.push('/search/album/' + this.props.match.params.search_text +'/'+album_id)
-        }
+        let path = this.props.match.param.search_type === 'artist' ? '/search/artist/' + this.props.match.params.search_text +'/'+ this.props.match.params.art_id + '/' +album_id : '/search/album/' + this.props.match.params.search_text +'/'+album_id
+        this.props.history.push(path)
     } 
+
 
     albumCard(album, dataparent, aria_expanded = false){
         return (

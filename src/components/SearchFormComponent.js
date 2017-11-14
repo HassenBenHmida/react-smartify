@@ -51,17 +51,17 @@ class SearchFormComponent extends Component {
                 </div>
 
                 <div className="mx-auto">
-                  <button onClick={(e) => this.search()} className="btn btn-primary" disabled={!this.state.search_text || !this.state.search_type}>Search</button>
+                  <button onClick={(e) => this.search()} className="btn btn-primary" disabled={!(this.state.search_text && this.state.search_type)}>Search</button>
                 </div>
 
                 <div className="col-sm-12">
-                  {(this.state.search) &&
-                    <Route path='/search/:search_type/:search_text/:art_id?/:alb_id?/:tra_id?' component={SearchResultComponent}/>}
+                  { //(this.state.search) &&
+                      <Route path='/search/:search_type/:search_text/:art_id?/:alb_id?/:tra_id?' component={SearchResultComponent}/>
+                  }
                 </div>
               </div>
             </div>
           </div>
-        
         </div>
       );
     }

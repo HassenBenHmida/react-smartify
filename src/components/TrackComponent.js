@@ -13,24 +13,25 @@ class TrackComponent extends Component {
         this.getTrackList()
     }
 
-    doSearch() {
-        if(this.props.match && this.props.match.params.search_text){
-            search(this.props.match.params.search_text, 'track').then(
-                json => {
-                this.setState({items: json.tracks.items})
-            })
+    componentWillReceiveProps(nextProps){//same as the function in ArtistComponent
+        if(this.props.match.params.search_text !== nextProps.match.params.search_text){
+            this.getTrackList(nextProps.match.params.search_text)
         }
     }
 
-    getTrackList(){
+    getTrackList(search_text = null){
         //Search for albums
         if(this.props.match && this.props.match.params.alb_id){
             getSongsByAlbum(this.props.match.params.alb_id).then(
                 json => {
                     this.setState({items: json.tracks.items})
                 })
-        }else{
-            this.doSearch()
+        }else if((this.props.match && this.props.match.params.search_text)||(search_text)){
+            search_text = (!search_text) ? this.props.match.params.search_text : search_text
+            search(search_text, 'track').then(
+                json => {
+                this.setState({items: json.tracks.items})
+            })
         }
     }
 
