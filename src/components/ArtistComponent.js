@@ -3,6 +3,10 @@ import { search } from '../lib/SpotifyUtil';
 import AlbumComponent from './AlbumComponent';
 import { Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
+
+import { addHistory } from '../actions';
+import { connect } from 'react-redux';
+
 class ArtistComponent extends Component {
   constructor(props) {
     super(props);
@@ -29,9 +33,13 @@ class ArtistComponent extends Component {
     }
   }
 
-  handleRouter(artist_id) {
+  handleRouter(artist_id, artist_name) {
     this.props.history.push('/search/artist/' + this.props.match.params.search_text + '/' + artist_id + '/');
     this.setState({ selectedArtist: artist_id });
+
+    // clicking on an artist save his name in history
+    this.props.addHistory({ search_type: 'artist', search_text: artist_name });
+    // handle
   }
 
   artistCard(artist, aria_expanded = false) {
@@ -43,7 +51,7 @@ class ArtistComponent extends Component {
               data-toggle="collapse"
               aria-expanded={aria_expanded}
               href={'#tabpanel-' + artist.id.toString()}
-              onClick={e => this.handleRouter(artist.id)}
+              onClick={e => this.handleRouter(artist.id, artist.name)}
               aria-controls={'tabpanel-' + artist.id.toString()}
             >
               {artist.name}
@@ -114,8 +122,19 @@ const propTypes = {
   params: PropTypes.object,
   history: PropTypes.object,
   search_text: PropTypes.string,
-  art_id: PropTypes.string
+  art_id: PropTypes.string,
+  addHistory: PropTypes.func
 };
+
+const mapStateToProps = (state, ownProps) => ({
+  search_history: state.formReducerHandler
+});
+
+const mapDispatchToProps = {
+  addHistory
+};
+
+ArtistComponent = connect(mapStateToProps, mapDispatchToProps)(ArtistComponent);
 
 ArtistComponent.propTypes = propTypes;
 export default ArtistComponent;

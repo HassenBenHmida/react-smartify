@@ -18,7 +18,7 @@ class AlbumComponent extends Component {
     //  ?
     if (this.props.match.params.search_type !== 'album') {
       // this.props.match.params = false
-      if (this.props.match.params.art_id !== nextProps.match.params.art_id) {
+      if (nextProps.match.prams && this.props.match.params.art_id !== nextProps.match.params.art_id) {
         this.getAlbumsList(null, nextProps.match.prams.art_id);
       }
     } else {

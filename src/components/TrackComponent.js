@@ -14,20 +14,27 @@ class TrackComponent extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    /* if((this.props.match) && (this.props.match.params.search_text !== nextProps.match.params.search_text)){
-            this.getTrackList(nextProps.match.params.search_text)
-        } */
-    if (this.props.match && this.props.match.params.search_type !== 'track') {
-      // check if this.props.match is defiened otherwise clicking on like button generates an error
-      if (this.props.match.params.alb_id !== nextProps.match.params.alb_id) {
-        this.getTrackList(null, nextProps.match.prams.alb_id);
-      }
-    } else {
-      // search_type = track
-      if (this.props.match && this.props.match.params.search_type !== nextProps.match.prams.search_type) {
-        this.getTrackList(nextProps.match.params.search_text);
-      }
+    if (this.props.match && this.props.match.params.search_text !== nextProps.match.params.search_text) {
+      this.getTrackList(nextProps.match.params.search_text);
     }
+    // ?????
+    /* if (
+      this.props.match &&
+      this.props.match.params &&
+      this.props.match.params.search_type &&
+      this.props.match.params.search_type !== 'track' &&
+      this.props.match.params.alb_id !== nextProps.match.params.alb_id
+    ) {
+      // check if this.props.match is defiened otherwise clicking on like button generates an error
+      this.getTrackList(null, nextProps.match.prams.alb_id);
+    } else if (
+      this.props.match &&
+      this.props.match.params &&
+      nextProps.match.prams &&
+      this.props.match.params.search_type !== nextProps.match.prams.search_type
+    ) {
+      this.getTrackList(nextProps.match.params.search_text);
+    } */
   }
 
   trackExistInStore(trackobject) {
@@ -48,6 +55,20 @@ class TrackComponent extends Component {
     }
   }
 
+  getTrackList(search_text = null) {
+    // Search for albums
+    if (this.props.match && this.props.match.params.alb_id) {
+      getSongsByAlbum(this.props.match.params.alb_id).then(json => {
+        this.setState({ items: json.tracks.items });
+      });
+    } else if ((this.props.match && this.props.match.params.search_text) || search_text) {
+      search_text = !search_text ? this.props.match.params.search_text : search_text;
+      search(search_text, 'track').then(json => {
+        this.setState({ items: json.tracks.items });
+      });
+    }
+  }
+  /*
   getTrackList(search_text = null, alb_id = null) {
     // Search for albums
     if (this.props.match && this.props.match.params.alb_id) {
@@ -61,7 +82,7 @@ class TrackComponent extends Component {
         this.setState({ items: json.tracks.items });
       });
     }
-  }
+  } */
 
   handleRouter(track_id) {
     if (this.props.history.location.pathname.includes('artist')) {
@@ -188,6 +209,7 @@ const propTypes = {
   history: PropTypes.object,
   tracks: PropTypes.object,
   search_text: PropTypes.string,
+  search_type: PropTypes.string,
   art_id: PropTypes.string,
   alb_id: PropTypes.string,
   removeFavorite: PropTypes.func,

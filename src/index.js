@@ -6,10 +6,10 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
 import { Provider } from 'react-redux';
-import { trackStore } from './stores';
+import { smartifyStore } from './stores';
 
 ReactDOM.render(
-  <Provider store={trackStore}>
+  <Provider store={smartifyStore}>
     <BrowserRouter>
       <Route path="/" component={App} />
     </BrowserRouter>

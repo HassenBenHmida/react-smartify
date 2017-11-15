@@ -1,4 +1,3 @@
-import { trackStore } from './trackStores';
-import { formStore } from './formStores';
+import { smartifyStore } from './appStores';
 
-export { trackStore, formStore };
+export { smartifyStore };

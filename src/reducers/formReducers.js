@@ -1,5 +1,4 @@
 import { ADD_HISTORY } from '../types';
-import { combineReducers } from 'redux';
 
 function formReducerHandler(state = {}, action) {
   switch (action.type) {
@@ -10,6 +9,7 @@ function formReducerHandler(state = {}, action) {
   }
 }
 
-export const formReducers = combineReducers({
+export { formReducerHandler };
+/* export const formReducers = combineReducers({
   formReducerHandler
-});
+}); */

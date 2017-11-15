@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import SearchResultComponent from './SearchResultComponent';
 import FavoritesComponent from './FavoritesComponent';
 import { Route } from 'react-router-dom';
-//  import { search } from '../lib/SpotifyUtil';
+import { addHistory } from '../actions';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -28,7 +28,24 @@ class SearchFormComponent extends Component {
 
   search() {
     this.props.history.push('/search/' + this.state.search_type + '/' + this.state.search_text + '/');
+    this.props.addHistory({ search_type: this.state.search_type, search_text: this.state.search_text });
+    // console.log(this.props);
     this.setState({ search: true });
+  }
+
+  getHistory() {
+    // console.log(this.props.form);
+    return this.props.search_history.map((item, key) => <option key={key} value={item.search_text} />);
+  }
+
+  handleInputChange(e) {
+    let result;
+    result = this.props.search_history.filter(element => element.search_text === e.target.value); // Filter last search with this text
+    this.setState({ search_text: e.target.value }); // save the state search text
+    if (result[0]) {
+      // in case of : the search text is already exist : change the type as well
+      this.setState({ search_type: result[0].search_type });
+    }
   }
 
   render() {
@@ -53,9 +70,12 @@ class SearchFormComponent extends Component {
                 <input
                   className="form-control"
                   type="text"
-                  onChange={e => this.setState({ search_text: e.target.value, search: false })}
+                  onChange={e => this.handleInputChange(e)}
                   value={this.state.search_text}
+                  list="search_history"
                 />
+
+                <datalist id="search_history">{this.getHistory()}</datalist>
               </div>
               <div className="col-sm-6">
                 <fieldset className="form-group">
@@ -107,14 +127,21 @@ class SearchFormComponent extends Component {
 const propTypes = {
   match: PropTypes.object,
   history: PropTypes.object,
-  tracks: PropTypes.object
+  tracks: PropTypes.object,
+  search_history: PropTypes.object,
+  addHistory: PropTypes.func
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  tracks: state.tracksReducerHandler
+  tracks: state.tracksReducerHandler,
+  search_history: state.formReducerHandler
 });
 
-SearchFormComponent = connect(mapStateToProps)(SearchFormComponent);
+const mapDispatchToProps = {
+  addHistory
+};
+
+SearchFormComponent = connect(mapStateToProps, mapDispatchToProps)(SearchFormComponent);
 
 SearchFormComponent.propTypes = propTypes;
 

@@ -1,5 +1,4 @@
 import { ADD_FAVORITE, REMOVE_FAVORITE } from '../types';
-import { combineReducers } from 'redux';
 
 function tracksReducerHandler(state = {}, action) {
   let result = state;
@@ -13,6 +12,8 @@ function tracksReducerHandler(state = {}, action) {
   }
 }
 
-export const trackReducers = combineReducers({
+export { tracksReducerHandler };
+/* export const trackReducers = combineReducers({
   tracksReducerHandler
 });
+ */
