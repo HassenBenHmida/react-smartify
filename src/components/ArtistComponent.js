@@ -38,7 +38,14 @@ class ArtistComponent extends Component {
     this.setState({ selectedArtist: artist_id });
 
     // clicking on an artist save his name in history
-    this.props.addHistory({ search_type: 'artist', search_text: artist_name });
+    // Check if his name is already exists
+    let result;
+    result = this.props.search_history.filter(
+      element => element.search_text.toLowerCase() === artist_name.toLowerCase()
+    );
+    if (!result[0]) {
+      this.props.addHistory({ search_type: 'artist', search_text: artist_name });
+    }
     // handle
   }
 
@@ -121,6 +128,7 @@ const propTypes = {
   match: PropTypes.object,
   params: PropTypes.object,
   history: PropTypes.object,
+  search_history: PropTypes.object,
   search_text: PropTypes.string,
   art_id: PropTypes.string,
   addHistory: PropTypes.func

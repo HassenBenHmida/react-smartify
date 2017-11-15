@@ -28,19 +28,23 @@ class SearchFormComponent extends Component {
 
   search() {
     this.props.history.push('/search/' + this.state.search_type + '/' + this.state.search_text + '/');
-    this.props.addHistory({ search_type: this.state.search_type, search_text: this.state.search_text });
-    // console.log(this.props);
+
+    let result = this.props.search_history.filter(
+      element => element.search_text.toLowerCase() === this.state.search_text.toLowerCase()
+    );
+    if (!result[0]) {
+      // Add the result only if the search text doesnt exist in history
+      this.props.addHistory({ search_type: this.state.search_type, search_text: this.state.search_text });
+    }
     this.setState({ search: true });
   }
 
   getHistory() {
-    // console.log(this.props.form);
     return this.props.search_history.map((item, key) => <option key={key} value={item.search_text} />);
   }
 
   handleInputChange(e) {
-    let result;
-    result = this.props.search_history.filter(element => element.search_text === e.target.value); // Filter last search with this text
+    let result = this.props.search_history.filter(element => element.search_text === e.target.value); // Filter last search with this text
     this.setState({ search_text: e.target.value }); // save the state search text
     if (result[0]) {
       // in case of : the search text is already exist : change the type as well
