@@ -1,3 +1,4 @@
-import { ADD_FAVORITE, REMOVE_FAVORITE, addFavorite, removeFavorite } from './trackActions';
+import { addFavorite, removeFavorite } from './trackActions';
+import { ADD_HISTORY, addHistory } from './formActions';
 
-export { ADD_FAVORITE, REMOVE_FAVORITE, addFavorite, removeFavorite };
+export { ADD_HISTORY, addFavorite, removeFavorite, addHistory };

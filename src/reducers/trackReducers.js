@@ -1,4 +1,4 @@
-import { ADD_FAVORITE, REMOVE_FAVORITE } from '../actions';
+import { ADD_FAVORITE, REMOVE_FAVORITE } from '../types';
 import { combineReducers } from 'redux';
 
 function tracksReducerHandler(state = {}, action) {

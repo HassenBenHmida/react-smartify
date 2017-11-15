@@ -1,9 +1,4 @@
-/*
- * action types
- */
-
-export const ADD_FAVORITE = 'ADD_FAVORITE';
-export const REMOVE_FAVORITE = 'REMOVE_FAVORITE';
+import { ADD_FAVORITE, REMOVE_FAVORITE } from '../types';
 
 /*
  * action creators

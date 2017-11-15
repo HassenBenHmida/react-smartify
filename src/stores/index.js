@@ -1,3 +1,4 @@
-import {trackStore} from './trackStores'
+import { trackStore } from './trackStores';
+import { formStore } from './formStores';
 
-export {trackStore}
+export { trackStore, formStore };
