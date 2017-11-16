@@ -39,18 +39,6 @@ class FavoritesComponent extends Component {
                 {this.props.tracks.length && this.props.tracks.length >= 0 ? (
                   <TrackComponent source="favComponent" />
                 ) : null}
-                {/* (this.props.tracks.length && this.props.tracks.length >= 0) ?
-                                    this.props.tracks.map((item, key) => (
-                                        <TrackComponent
-                                                object={item}
-                                                imageOfThis={(JSON.parse(item).images && JSON.parse(item).images[0]) ? JSON.parse(item).images[0].url : null}
-                                                href={(JSON.parse(item).href) ? JSON.parse(item).href : null}
-                                                duration_ms={(JSON.parse(item).duration_ms) ? JSON.parse(item).duration_ms : null}
-                                                key={key} 
-                                                id={JSON.parse(item).id} 
-                                                name={JSON.parse(item).name} 
-                                                accordion={'#accordion-favorites'} />
-                                    )) : "No Favorite Tracks Yet." */}
               </div>
             </div>
             <div className="modal-footer">
