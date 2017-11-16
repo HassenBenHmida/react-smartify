@@ -23,3 +23,5 @@ yarn-error.log*
 .editorconfig
 .eslintrc.json
 /.idea
+
+config.js
