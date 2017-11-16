@@ -37,9 +37,9 @@ class TrackComponent extends Component {
     } */
   }
 
-  trackExistInStore(trackobject) {
+  trackExistInStore(track) {
     let result;
-    result = this.props.tracks.filter(item => item === trackobject); // Filter the object
+    result = this.props.tracks.filter(item => item.id === track.id); // Filter the object
     let number = result.reduce(function(accumulator, currentValue) {
       // If object lenght = 0 then return false
       return accumulator + 1;
@@ -47,11 +47,11 @@ class TrackComponent extends Component {
     return number > 0;
   }
 
-  handleButton(trackobject) {
-    if (this.trackExistInStore(trackobject)) {
-      this.props.removeFavorite(trackobject);
+  handleButton(track) {
+    if (this.trackExistInStore(track)) {
+      this.props.removeFavorite(track);
     } else {
-      this.props.addFavorite(trackobject);
+      this.props.addFavorite(track);
     }
   }
 
@@ -106,14 +106,6 @@ class TrackComponent extends Component {
   }
 
   trackCard(track, dataparent, aria_expanded = false) {
-    let trackobject;
-    if (typeof track === 'object') {
-      trackobject = JSON.stringify(track);
-    } else {
-      trackobject = track;
-      track = JSON.parse(track);
-    }
-
     return (
       <div className="card" key={track.id}>
         <div className="card-header" role="tab" id={('card-header' + track.id.toString()).replace(/ /g, '')}>
@@ -143,8 +135,8 @@ class TrackComponent extends Component {
               <div className="card-body">
                 <div className="float-sm-right">
                   {
-                    <button onClick={e => this.handleButton(trackobject)}>
-                      <i className={this.trackExistInStore(trackobject) === false ? 'fa fa-heart-o' : 'fa fa-heart'} />
+                    <button onClick={e => this.handleButton(track)}>
+                      <i className={this.trackExistInStore(track) === false ? 'fa fa-heart-o' : 'fa fa-heart'} />
                     </button>
                   }
                 </div>
@@ -184,7 +176,7 @@ class TrackComponent extends Component {
             : null}
 
           {this.props.tracks && this.props.source === 'favComponent'
-            ? this.props.tracks.map(item => this.trackCard(JSON.parse(item), '#' + accordian_id, false))
+            ? this.props.tracks.map(item => this.trackCard(item, '#' + accordian_id, false))
             : null}
         </div>
       </div>

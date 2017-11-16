@@ -6,14 +6,10 @@ function tracksReducerHandler(state = [], action) {
     case ADD_FAVORITE:
       return [...state, action.track];
     case REMOVE_FAVORITE:
-      return result.filter(item => item !== action.track);
+      return result.filter(item => item.id !== action.track.id);
     default:
       return state;
   }
 }
 
 export { tracksReducerHandler };
-/* export const trackReducers = combineReducers({
-  tracksReducerHandler
-});
- */
