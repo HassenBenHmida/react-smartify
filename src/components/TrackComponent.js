@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { addFavorite, removeFavorite } from '../actions';
 import { getSongsByAlbum, search } from '../lib/SpotifyUtil';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 class TrackComponent extends Component {
   constructor(props) {
@@ -11,30 +12,6 @@ class TrackComponent extends Component {
       items: undefined
     };
     this.getTrackList();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.match && this.props.match.params.search_text !== nextProps.match.params.search_text) {
-      this.getTrackList(nextProps.match.params.search_text);
-    }
-    // ?????
-    /* if (
-      this.props.match &&
-      this.props.match.params &&
-      this.props.match.params.search_type &&
-      this.props.match.params.search_type !== 'track' &&
-      this.props.match.params.alb_id !== nextProps.match.params.alb_id
-    ) {
-      // check if this.props.match is defiened otherwise clicking on like button generates an error
-      this.getTrackList(null, nextProps.match.prams.alb_id);
-    } else if (
-      this.props.match &&
-      this.props.match.params &&
-      nextProps.match.prams &&
-      this.props.match.params.search_type !== nextProps.match.prams.search_type
-    ) {
-      this.getTrackList(nextProps.match.params.search_text);
-    } */
   }
 
   trackExistInStore(track) {
@@ -68,40 +45,45 @@ class TrackComponent extends Component {
       });
     }
   }
-  /*
-  getTrackList(search_text = null, alb_id = null) {
-    // Search for albums
-    if (this.props.match && this.props.match.params.alb_id) {
-      alb_id = !alb_id ? this.props.match.params.alb_id : alb_id;
-      getSongsByAlbum(alb_id).then(json => {
-        this.setState({ items: json.tracks.items });
-      });
-    } else if ((this.props.match && this.props.match.params.search_text) || search_text) {
-      search_text = !search_text ? this.props.match.params.search_text : search_text;
-      search(search_text, 'track').then(json => {
-        this.setState({ items: json.tracks.items });
-      });
-    }
-  } */
 
   handleRouter(track_id) {
-    if (this.props.history.location.pathname.includes('artist')) {
-      this.props.history.push(
+    let path;
+    if (this.props.match.params.search_type === 'artist') {
+      path =
         '/search/artist/' +
-          this.props.match.params.search_text +
-          '/' +
-          this.props.match.params.art_id +
-          '/' +
-          this.props.match.params.alb_id +
-          '/' +
-          track_id
-      );
-    } else if (this.props.history.location.pathname.includes('album')) {
-      this.props.history.push(
-        '/search/album/' + this.props.match.params.search_text + '/' + this.props.match.params.alb_id + '/' + track_id
-      );
+        this.props.match.params.search_text +
+        '/' +
+        this.props.match.params.art_id +
+        '/' +
+        this.props.match.params.alb_id +
+        '/' +
+        track_id;
+      this.props.history.push({
+        pathname: path,
+        search_text: this.props.match.params.search_text,
+        search_type: this.props.match.params.search_type,
+        art_id: this.props.match.params.art_id,
+        alb_id: this.props.match.params.alb_id,
+        tra_id: track_id
+      });
+    } else if (this.props.match.params.search_type === 'album') {
+      path =
+        '/search/album/' + this.props.match.params.search_text + '/' + this.props.match.params.alb_id + '/' + track_id;
+      this.props.history.push({
+        pathname: path,
+        search_text: this.props.match.params.search_text,
+        search_type: this.props.match.params.search_type,
+        alb_id: this.props.match.params.alb_id,
+        tra_id: track_id
+      });
     } else {
-      this.props.history.push('/search/track/' + this.props.match.params.search_text + '/' + track_id);
+      path = '/search/track/' + this.props.match.params.search_text + '/' + track_id;
+      this.props.history.push({
+        pathname: path,
+        search_text: this.props.match.params.search_text,
+        search_type: this.props.match.params.search_type,
+        tra_id: track_id
+      });
     }
   }
 
@@ -110,16 +92,16 @@ class TrackComponent extends Component {
       <div className="card" key={track.id}>
         <div className="card-header" role="tab" id={('card-header' + track.id.toString()).replace(/ /g, '')}>
           <h5 className="mb-0">
-            <a
+            <Link
+              to={track.id}
               data-toggle="collapse"
+              data-target={'#tabpanel-' + track.id.toString()}
               aria-expanded={aria_expanded}
-              href={'#tabpanel-' + track.id.toString()}
-              //  When the user click on a track in the FavoriteComponent the router will not change
               onClick={e => (this.props.source !== 'favComponent' ? this.handleRouter(track.id) : null)}
               aria-controls={'tabpanel-' + track.id.toString()}
             >
               {track.name}
-            </a>
+            </Link>
           </h5>
         </div>
 

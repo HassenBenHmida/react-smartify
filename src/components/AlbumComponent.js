@@ -1,35 +1,16 @@
 import React, { Component } from 'react';
 import { getAlbumsByArtist, search } from '../lib/SpotifyUtil';
 import TrackComponent from './TrackComponent';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 class AlbumComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: undefined,
-      selectedAlbum: undefined
+      items: undefined
     };
 
     this.getAlbumsList();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    //  ?
-    if (this.props.match.params.search_type !== 'album') {
-      // this.props.match.params = false
-      if (nextProps.match.prams && this.props.match.params.art_id !== nextProps.match.params.art_id) {
-        this.getAlbumsList(null, nextProps.match.prams.art_id);
-      }
-    } else {
-      // search_type = album
-      if (this.props.match.params.search_type !== nextProps.match.prams.search_type) {
-        this.getAlbumsList(nextProps.match.params.search_text);
-      }
-    }
-    /*  if(this.props.match.params.search_text !== nextProps.match.params.search_text){
-            this.getAlbumsList(nextProps.match.params.search_text)
-        } */
   }
 
   getAlbumsList(search_text = null, art_id = null) {
@@ -48,10 +29,26 @@ class AlbumComponent extends Component {
   }
 
   handleRouter(album_id) {
-    let path = this.props.history.location.pathname.includes('artist')
-      ? '/search/artist/' + this.props.match.params.search_text + '/' + this.props.match.params.art_id + '/' + album_id
-      : '/search/album/' + this.props.match.params.search_text + '/' + album_id;
-    this.props.history.push(path);
+    let path;
+    if (this.props.match.params.search_type === 'artist') {
+      path =
+        '/search/artist/' + this.props.match.params.search_text + '/' + this.props.match.params.art_id + '/' + album_id;
+      this.props.history.push({
+        pathname: path,
+        search_text: this.props.match.params.search_text,
+        search_type: this.props.match.params.search_type,
+        art_id: this.props.match.params.art_id,
+        alb_id: album_id
+      });
+    } else {
+      path = '/search/album/' + this.props.match.params.search_text + '/' + album_id;
+      this.props.history.push({
+        pathname: path,
+        search_text: this.props.match.params.search_text,
+        search_type: this.props.match.params.search_type,
+        alb_id: album_id
+      });
+    }
   }
 
   albumCard(album, dataparent, aria_expanded = false) {
@@ -59,15 +56,16 @@ class AlbumComponent extends Component {
       <div className="card" key={album.id}>
         <div className="card-header" role="tab" id={('card-header' + album.id.toString()).replace(/ /g, '')}>
           <h5 className="mb-0">
-            <a
+            <Link
+              to={album.id}
               data-toggle="collapse"
+              data-target={'#tabpanel-' + album.id.toString()}
               aria-expanded={aria_expanded}
-              href={'#tabpanel-' + album.id.toString()}
               onClick={e => this.handleRouter(album.id)}
               aria-controls={'tabpanel-' + album.id.toString()}
             >
               {album.name}
-            </a>
+            </Link>
           </h5>
         </div>
 
@@ -94,11 +92,11 @@ class AlbumComponent extends Component {
               </div>
               <br />
 
-              {this.state.selectedAlbum === album.id || this.props.match.params.alb_id === album.id ? ( // without this test all the track accordians will receive the same id (album id in the path) which generate an error => only the first track accordian can be opened
-                <Switch>
-                  <Route path="/search/artist/:search_text/:art_id?/:alb_id?/:tra_id?/" component={TrackComponent} />
-                  <Route path="/search/album/:search_text/:alb_id?/:tra_id?/" component={TrackComponent} />
-                </Switch>
+              {this.props.match.params.alb_id === album.id ? ( // without this test all the track accordians will receive the same id (album id in the path) which generate an error => only the first track accordian can be opened
+                <Route
+                  path="/search/:search_type/:search_text/:art_id?/:alb_id?/:tra_id?/"
+                  component={TrackComponent}
+                />
               ) : (
                 <div id="spinner" className="text-center">
                   <i className="fa fa-spinner fa-spin" />
