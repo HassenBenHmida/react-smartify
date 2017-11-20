@@ -38,7 +38,7 @@ class ArtistComponent extends Component {
     this.setState({ selectedArtist: artist_id });
 
     // clicking on an artist save his name in history
-    // Check if his name is already exists .
+    // Check if his name is already exists
     let result;
     result = this.props.search_history.filter(
       element => element.search_text.toLowerCase() === artist_name.toLowerCase()
